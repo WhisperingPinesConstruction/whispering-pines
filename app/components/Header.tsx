@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useMemo, useState, useEffect, useRef } from "react";
+import logoPng from "@/public/whisperingpineslogo.png";
 
 type NavItem = {
   href: string;
@@ -148,7 +149,7 @@ export default function Header() {
           >
             <Image
               ref={logoTargetImgRef}
-              src="/whisperingpineslogo.png"
+              src={logoPng}
               alt="Whispering Pines"
               width={400}
               height={400}
@@ -254,7 +255,7 @@ export default function Header() {
           <Link href="/">
             <Image
               ref={floatingImgRef}
-              src="/whisperingpineslogo.png"
+              src={logoPng}
               alt="Whispering Pines"
               width={900}
               height={900}
