@@ -1,26 +1,358 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f0; /* Warm cream background */
+  --foreground: #2a2a2a; /* Softer black */
+  --brand-cream: #f7f3eb; /* Existing logo background */
+  --forest-green: #3d5a3a; /* Rich forest green */
+  --sage-green: #7a8b6f; /* Warm sage */
+  --cream: #f5ead8; /* Rich cream */
+  --warm-tan: #e8dcc6; /* Warm tan */
+  --deep-green: #2a3f28; /* Deep green for headers */
+  --gold-accent: #c9a961; /* Warm gold */
+  --wood-brown: #8b6f47; /* Natural wood */
+  --stone-gray: #8c8577; /* Warmer gray */
+
+  /* Layered surface system */
+  --surface-0: var(--background);
+  --surface-1: color-mix(in oklab, var(--background) 92%, white);
+  --surface-2: color-mix(in oklab, var(--background) 85%, white);
+  --surface-3: color-mix(in oklab, var(--background) 78%, white);
+
+  /* Shadow/highlight colors (RGB channel vars for easy alpha control) */
+  --shadow-rgb: 0 0 0;
+  --highlight-rgb: 255 255 255;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-forest-green: var(--forest-green);
+  --color-sage-green: var(--sage-green);
+  --color-cream: var(--cream);
+  --color-warm-tan: var(--warm-tan);
+  --color-deep-green: var(--deep-green);
+  --color-gold-accent: var(--gold-accent);
+  --color-wood-brown: var(--wood-brown);
+  --color-stone-gray: var(--stone-gray);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #fafaf8;
+    --premium-green: #3a4d36;
+    --sage-accent: #7b8c75;
+    /* Surfaces lift slightly above dark base */
+    --surface-0: var(--background);
+    --surface-1: color-mix(in oklab, var(--background) 86%, white);
+    --surface-2: color-mix(in oklab, var(--background) 78%, white);
+    --surface-3: color-mix(in oklab, var(--background) 70%, white);
+    --shadow-rgb: 0 0 0;
+    --highlight-rgb: 255 255 255;
   }
 }
+
+/* Premium typography */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling and anchor offsets */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 6rem; /* account for sticky header */
+}
+
+/* Sophisticated heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Premium button styles */
+.premium-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.premium-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.premium-button:hover::before {
+  left: 100%;
+}
+
+/* Subtle premium shadows */
+.premium-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04),
+    0 8px 16px rgba(0, 0, 0, 0.04);
+}
+
+.premium-shadow-lg {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06), 0 8px 16px rgba(0, 0, 0, 0.06),
+    0 16px 32px rgba(0, 0, 0, 0.06);
+}
+
+/* Refined borders */
+.premium-border {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.premium-border-dark {
+  border: 1px solid var(--premium-green);
+}
+
+/* High-end card styling */
+.luxury-card {
+  background: var(--warm-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(45, 62, 41, 0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.luxury-card:hover {
+  transform: translateY(-2px);
+}
+
+.luxury-card:hover::after {
+  border-color: rgba(45, 62, 41, 0.1);
+}
+
+/* Clean background without overlay patterns */
+
+/* Sophisticated dividers */
+.premium-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(45, 62, 41, 0.1) 20%,
+    rgba(45, 62, 41, 0.1) 80%,
+    transparent
+  );
+}
+
+/* Premium text treatments */
+.premium-prose {
+  line-height: 1.75;
+  color: var(--charcoal);
+  font-weight: 400;
+}
+
+.premium-prose p {
+  margin-bottom: 1.5rem;
+}
+
+/* Elegant testimonial quotes */
+.luxury-quote {
+  position: relative;
+  padding-left: 2rem;
+  border-left: 2px solid var(--gold-accent);
+  font-family: "Playfair Display", serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--premium-green);
+}
+
+/* Premium form inputs */
+.premium-input {
+  background: var(--warm-white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-input:focus {
+  border-color: var(--premium-green);
+  box-shadow: 0 0 0 3px rgba(45, 62, 41, 0.05);
+  outline: none;
+}
+
+/*
+  Layered depth system (mirrors your SwiftUI stack of shadows):
+  - inset top highlight (soft glow from above)
+  - close soft shadow
+  - mid / deep shadow
+*/
+.surface-0 {
+  background: var(--surface-0);
+}
+.surface-1 {
+  background: var(--surface-1);
+}
+.surface-2 {
+  background: var(--surface-2);
+}
+.surface-3 {
+  background: var(--surface-3);
+}
+
+.elev-1 {
+  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.55),
+    /* top highlight */ 0 1px 1px rgb(var(--shadow-rgb) / 0.12),
+    /* close soft */ 0 2px 4px rgb(var(--shadow-rgb) / 0.1); /* mid */
+}
+
+.elev-2 {
+  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.5),
+    0 2px 4px rgb(var(--shadow-rgb) / 0.14),
+    0 6px 12px rgb(var(--shadow-rgb) / 0.12);
+}
+
+.elev-3 {
+  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.45),
+    0 4px 8px rgb(var(--shadow-rgb) / 0.16),
+    0 12px 24px rgb(var(--shadow-rgb) / 0.14);
+}
+
+.elev-hover-2:hover {
+  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.5),
+    0 3px 6px rgb(var(--shadow-rgb) / 0.16),
+    0 10px 20px rgb(var(--shadow-rgb) / 0.14);
+}
+
+/* Inset well effect (table or depressed panels) */
+.inset-well {
+  background: var(--surface-1);
+  box-shadow: inset 0 2px 4px rgb(var(--highlight-rgb) / 0.22),
+    /* light rim top */ inset 0 -2px 6px rgb(var(--shadow-rgb) / 0.25); /* darker bottom */
+}
+
+/* Shiny top highlight band for gradients */
+.top-sheen {
+  overflow: hidden;
+}
+.top-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--highlight-rgb) / 0.14),
+    transparent 38%
+  );
+  pointer-events: none;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--stone-gray);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sage-accent);
+}
+
+/* Premium animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Removed noise texture that was causing visual issues */
+
+/* Premium hover effects */
+.premium-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-hover:hover {
+  transform: translateY(-2px);
+}
+
+/* Sophisticated loading states */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--background) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    var(--background) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Premium responsive utilities */
+@media (min-width: 768px) {
+  .md\:premium-text-balance {
+    text-wrap: balance;
+  }
 }
