@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useMemo, useState, useEffect } from "react";
 import logoPng from "@/public/whisperingpineslogo.png";
-import woodBG from "@/public/WoodGrain.jpg";
 
 type NavItem = {
   href: string;
@@ -49,7 +48,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="rounded-full bg-cream/10 p-2 elev-1">
+          <div className="rounded-full bg-cream/80 p-2 elev-1">
             <Image
               src={logoPng}
               alt="Whispering Pines"
