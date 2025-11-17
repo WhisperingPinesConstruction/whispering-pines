@@ -1,0 +1,145 @@
+import Link from "next/link";
+import woodBG from "@/public/WoodGrain.jpg";
+
+export default function HeroTop() {
+  const isVisible = true;
+
+  return (
+    <section className="relative -mx-4 -mt-8 mb-20 overflow-hidden">
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 bg-center bg-cover"
+          style={{
+            backgroundImage: `url(${woodBG.src})`,
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.8) 100%)",
+          }}
+        />
+      </div>
+
+      <div className="relative">
+        <div className="mx-auto max-w-6xl px-8 py-24 md:py-32">
+          <div
+            className={`transition-all duration-1000 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          >
+            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cream/30 bg-cream/20 px-5 py-2.5 backdrop-blur-sm">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-accent opacity-75"></span>
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold-accent"></span>
+              </span>
+              <span className="text-sm font-medium uppercase tracking-wide text-cream">
+                New in Ottawa
+              </span>
+            </div>
+
+            <h1 className="max-w-4xl font-serif text-4xl font-normal leading-tight text-cream md:text-6xl lg:text-7xl">
+              Building Dreams with
+              <span className="mt-2 block text-5xl italic text-gold-accent md:text-7xl lg:text-8xl">
+                Heart & Hammer
+              </span>
+            </h1>
+
+            <p className="mt-8 max-w-3xl text-lg leading-relaxed text-cream/90 md:text-xl">
+              Twenty years of experience meets fresh enthusiasm. From
+              multi-million dollar estates to your cozy bathroom reno, we bring
+              craftsmanship and creative solutions to every nail we drive.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
+                ✓ Family-Owned
+              </span>
+              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
+                ✓ 20 Years Experience
+              </span>
+              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
+                ✓ Free Quotes
+              </span>
+            </div>
+
+            <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <Link
+                href="#contact"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 transition-all hover:scale-105 hover:elev-3"
+              >
+                <span className="relative z-10 flex items-center gap-2 font-semibold">
+                  Get Your Free Quote
+                  <svg
+                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 -z-10 bg-linear-to-r from-cream to-gold-accent opacity-0 transition-opacity group-hover:opacity-100" />
+              </Link>
+
+              <Link
+                href="#services"
+                className="group inline-flex items-center gap-2 border-b-2 border-cream/30 px-2 py-1 text-cream transition-all hover:border-cream/60"
+              >
+                <span>Explore Our Work</span>
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </Link>
+            </div>
+
+            <p className="mt-8 text-sm font-medium italic text-gold-accent/80">
+              &ldquo;Eager to earn your trust, one project at a time&rdquo;
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute -bottom-1 left-0 right-0">
+        <svg
+          viewBox="0 0 1440 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full"
+        >
+          <path
+            d="M0 40C240 80 480 20 720 40C960 60 1200 30 1440 40V120H0V40Z"
+            fill="#0f2e1e"
+          />
+          <path
+            d="M0 60C240 90 480 40 720 60C960 80 1200 50 1440 60V120H0V60Z"
+            fill="#1b3a2a"
+            opacity="0.5"
+          />
+          <path
+            d="M0 80C240 100 480 60 720 80C960 100 1200 70 1440 80V120H0V80Z"
+            fill="#18362a"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+}
+
+
