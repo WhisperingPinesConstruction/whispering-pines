@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
 2:I[23532,["/whispering-pines/_next/static/chunks/3c8f70c53ab86145.js","/whispering-pines/_next/static/chunks/d276a49971e241af.js"],"OutletBoundary"]
 3:"$Sreact.suspense"
-0:{"buildId":"asXq0czTtLkcEk0m6hrRL","rsc":["$","$1","c",{"children":[["$","section",null,{"className":"prose prose-zinc max-w-none dark:prose-invert","children":[["$","h1",null,{"children":"Projects"}],["$","p",null,{"children":"A curated list of projects will appear here."}],["$","ul",null,{"children":[["$","li",null,{"children":"Project A — brief description"}],["$","li",null,{"children":"Project B — brief description"}]]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"DOA-986-CNETbVsCZahpa","rsc":["$","$1","c",{"children":[["$","section",null,{"className":"prose prose-zinc max-w-none dark:prose-invert","children":[["$","h1",null,{"children":"Projects"}],["$","p",null,{"children":"A curated list of projects will appear here."}],["$","ul",null,{"children":[["$","li",null,{"children":"Project A — brief description"}],["$","li",null,{"children":"Project B — brief description"}]]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
 4:null
