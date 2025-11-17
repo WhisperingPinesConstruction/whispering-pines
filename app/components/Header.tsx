@@ -3,8 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useMemo, useState, useEffect, useRef } from "react";
-import logoPng from "@/public/whisperingpineslogo.png";
+import { useMemo, useState, useEffect } from "react";
 
 type NavItem = {
   href: string;
@@ -23,104 +22,13 @@ export default function Header() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const headerRef = useRef<HTMLElement | null>(null);
-  const floatingLogoRef = useRef<HTMLDivElement | null>(null);
-  const logoTargetRef = useRef<HTMLDivElement | null>(null);
-  const floatingContainerRef = useRef<HTMLDivElement | null>(null);
-  const floatingImgRef = useRef<HTMLImageElement | null>(null);
-  const logoTargetImgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    type Killable = { kill?: () => void };
-    type TimelineApi = Killable & {
-      to?: (
-        target: unknown,
-        vars: Record<string, unknown>,
-        position?: number | string
-      ) => unknown;
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
     };
-
-    let tl: Killable | null = null;
-    let removeResize: (() => void) | null = null;
-
-    (async () => {
-      try {
-        const [{ gsap }, scrollTriggerMod] = await Promise.all([
-          import("gsap"),
-          import("gsap/ScrollTrigger").catch(
-            () => import("gsap/dist/ScrollTrigger")
-          ),
-        ]);
-        const ScrollTriggerExport = (
-          scrollTriggerMod as { ScrollTrigger: unknown }
-        ).ScrollTrigger;
-        gsap.registerPlugin(ScrollTriggerExport as unknown);
-
-        const floating = floatingLogoRef.current;
-        const target = logoTargetRef.current;
-        const floatingImg = floatingImgRef.current;
-        const targetImg = logoTargetImgRef.current;
-        if (!floating || !target || !floatingImg || !targetImg) {
-          setIsScrolled(true);
-          return;
-        }
-
-        const GSAP = gsap as unknown as {
-          timeline: (vars?: Record<string, unknown>) => TimelineApi;
-          set: (target: unknown, vars: Record<string, unknown>) => void;
-          registerPlugin: (...plugins: unknown[]) => void;
-        };
-
-        const build = () => {
-          GSAP.set(floating, {
-            x: 0,
-            y: 0,
-            scale: 1,
-            transformOrigin: "top left",
-          });
-          const floatingRect = floatingImg.getBoundingClientRect();
-          const targetRect = targetImg.getBoundingClientRect();
-          const dx = targetRect.left - floatingRect.left;
-          const dy = targetRect.top - floatingRect.top;
-          const scale = (targetRect.height || 1) / (floatingRect.height || 1);
-
-          (tl as Killable | null)?.kill?.();
-          const newTl = GSAP.timeline({
-            scrollTrigger: {
-              trigger: document.documentElement,
-              start: "top top", // delay start by 120px of scroll
-              end: "+=300",
-              scrub: true,
-              onUpdate: (self: { progress: number }) => {
-                setIsScrolled(self.progress >= 0.33);
-              },
-              onLeaveBack: () => setIsScrolled(false),
-            },
-          }) as TimelineApi;
-
-          newTl.to?.(floating, { x: dx, y: dy, scale, ease: "power1.out" }, 0);
-          newTl.to?.(target, { opacity: 1 }, 0.85);
-          newTl.to?.(floating, { opacity: 0 }, 0.95);
-          tl = newTl;
-        };
-
-        // Defer to next frame so layout is settled
-        requestAnimationFrame(build);
-        const onResize = () => requestAnimationFrame(build);
-        window.addEventListener("resize", onResize);
-        removeResize = () => window.removeEventListener("resize", onResize);
-      } catch {
-        // Fallback: solid after small scroll
-        const onScroll = () => setIsScrolled(window.scrollY > 1);
-        window.addEventListener("scroll", onScroll);
-        removeResize = () => window.removeEventListener("scroll", onScroll);
-      }
-    })();
-
-    return () => {
-      (tl as Killable | null)?.kill?.();
-      removeResize?.();
-    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const activeHref = useMemo(() => {
@@ -130,26 +38,18 @@ export default function Header() {
 
   return (
     <header
-      ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
+      className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled
           ? "bg-forest-green/95 backdrop-blur-md elev-3 top-sheen"
-          : "bg-transparent"
+          : "bg-forest-green/90 backdrop-blur-sm elev-2 top-sheen"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div
-            ref={logoTargetRef}
-            id="header-logo-target"
-            className={`rounded-full p-2 elev-1 transition-opacity duration-300 ${
-              isScrolled ? "bg-cream/10 opacity-100" : "opacity-0"
-            }`}
-          >
+          <div className="rounded-full bg-cream/10 p-2 elev-1">
             <Image
-              ref={logoTargetImgRef}
-              src={logoPng}
+              src="/whisperingpineslogo.png"
               alt="Whispering Pines"
               width={400}
               height={400}
@@ -157,11 +57,7 @@ export default function Header() {
               className="h-10 w-auto md:h-12"
             />
           </div>
-          <div
-            className={`hidden sm:block transition-opacity duration-100 ${
-              isScrolled ? "opacity-100" : "opacity-0"
-            }`}
-          >
+          <div className="hidden sm:block">
             <div className="font-serif text-xl text-cream">
               Whispering Pines
             </div>
@@ -243,27 +139,6 @@ export default function Header() {
             )}
           </svg>
         </button>
-      </div>
-
-      {/* Floating header logo that shrinks and attaches */}
-      <div
-        ref={floatingContainerRef}
-        id="header-floating-logo"
-        className="pointer-events-auto absolute left-1/2 -translate-x-1/2 top-[calc(100%+16px)] z-40"
-      >
-        <div ref={floatingLogoRef} className="mx-auto will-change-transform">
-          <Link href="/">
-            <Image
-              ref={floatingImgRef}
-              src={logoPng}
-              alt="Whispering Pines"
-              width={900}
-              height={900}
-              priority
-              className="h-24 w-auto md:h-40 lg:h-52 opacity-95 drop-shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
-            />
-          </Link>
-        </div>
       </div>
 
       {/* Mobile Navigation */}

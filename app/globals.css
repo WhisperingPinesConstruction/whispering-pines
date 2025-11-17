@@ -2,17 +2,26 @@
 @import "tailwindcss";
 
 :root {
+  /* Base brand palette */
+  --brand-green: #05472a; /* Single source of truth for green */
+  --sage-green: #7a8b6f;
+  --gold-accent: #c9a961;
+  --wood-brown: #8b6f47;
+  --stone-gray: #8c8577;
+
+  /* Neutrals */
   --background: #faf7f0; /* Warm cream background */
   --foreground: #2a2a2a; /* Softer black */
   --brand-cream: #f7f3eb; /* Existing logo background */
-  --forest-green: #3d5a3a; /* Rich forest green */
-  --sage-green: #7a8b6f; /* Warm sage */
   --cream: #f5ead8; /* Rich cream */
   --warm-tan: #e8dcc6; /* Warm tan */
-  --deep-green: #2a3f28; /* Deep green for headers */
-  --gold-accent: #c9a961; /* Warm gold */
-  --wood-brown: #8b6f47; /* Natural wood */
-  --stone-gray: #8c8577; /* Warmer gray */
+  --warm-white: var(--brand-cream);
+  --charcoal: #2a2a2a;
+
+  /* Semantic brand aliases (all map to brand green) */
+  --forest-green: var(--brand-green);
+  --deep-green: var(--brand-green);
+  --premium-green: var(--brand-green);
 
   /* Layered surface system */
   --surface-0: var(--background);
@@ -23,6 +32,9 @@
   /* Shadow/highlight colors (RGB channel vars for easy alpha control) */
   --shadow-rgb: 0 0 0;
   --highlight-rgb: 255 255 255;
+
+  /* Accent variants */
+  --sage-accent: var(--sage-green);
 }
 
 @theme inline {
@@ -40,11 +52,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #fafaf8;
-    --premium-green: #3a4d36;
     --sage-accent: #7b8c75;
     /* Surfaces lift slightly above dark base */
     --surface-0: var(--background);
@@ -278,8 +289,8 @@ h6 {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgb(var(--highlight-rgb) / 0.14),
-    transparent 38%
+    rgb(var(--highlight-rgb) / 0.1),
+    transparent 10%
   );
   pointer-events: none;
 }
@@ -317,8 +328,6 @@ h6 {
 .animate-fade-in-up {
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-
-/* Removed noise texture that was causing visual issues */
 
 /* Premium hover effects */
 .premium-hover {

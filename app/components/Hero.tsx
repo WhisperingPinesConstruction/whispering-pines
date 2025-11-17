@@ -1,29 +1,27 @@
 "use client";
 
 import Link from "next/link";
-// Image import removed; no hero logo overlay anymore
 
 export default function Hero() {
   const isVisible = true;
 
   return (
     <>
-      {/* Hero Section with Rich, Warm Colors */}
+      {/* Hero Section with Wood Background */}
       <section className="relative -mx-4 -mt-8 mb-20 overflow-hidden">
-        {/* Layered gradient background with warmth */}
+        {/* Background image + radial black overlay */}
         <div className="absolute inset-0">
-          {/* Base gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-forest-green via-forest-green/95 to-deep-green" />
-
-          {/* Warm overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-wood-brown/20 to-transparent mix-blend-multiply" />
-
-          {/* Texture overlay */}
           <div
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 bg-center bg-cover"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath d='M0 50 Q25 40 50 50 T100 50' stroke='%23f5ead8' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3Cpath d='M0 60 Q25 50 50 60 T100 60' stroke='%23f5ead8' stroke-width='0.5' fill='none' opacity='0.2'/%3E%3C/g%3E%3C/svg%3E")`,
-              backgroundSize: "200px 200px",
+              backgroundImage: `url(/WoodGrain.jpg)`,
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.8) 100%)",
             }}
           />
         </div>
@@ -81,7 +79,7 @@ export default function Hero() {
               <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <Link
                   href="#contact"
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 transition-all hover:scale-105 hover:elev-3"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 transition-all hover:scale-105 hover:elev-3"
                 >
                   <span className="relative z-10 flex items-center gap-2 font-semibold">
                     Get Your Free Quote
@@ -99,7 +97,7 @@ export default function Hero() {
                       />
                     </svg>
                   </span>
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-cream to-gold-accent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute inset-0 -z-10 bg-linear-to-r from-cream to-gold-accent opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
 
                 <Link
@@ -157,35 +155,44 @@ export default function Hero() {
       </section>
 
       {/* Warm transition section */}
-      <section className="relative -mt-20 bg-gradient-to-b from-cream via-warm-tan/30 to-transparent pb-20 pt-24">
-        <div className="mx-auto max-w-5xl px-8">
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="text-center">
-              <div className="mb-3 text-5xl text-wood-brown">🏠</div>
-              <h3 className="mb-2 font-serif text-xl text-deep-green">
-                Custom Homes
-              </h3>
-              <p className="text-sm leading-relaxed text-stone-gray">
-                Dream big, we&rsquo;ll build bigger
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="mb-3 text-5xl text-wood-brown">🔨</div>
-              <h3 className="mb-2 font-serif text-xl text-deep-green">
-                Renovations
-              </h3>
-              <p className="text-sm leading-relaxed text-stone-gray">
-                Love your home again
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="mb-3 text-5xl text-wood-brown">🌲</div>
-              <h3 className="mb-2 font-serif text-xl text-deep-green">
-                Outdoor Living
-              </h3>
-              <p className="text-sm leading-relaxed text-stone-gray">
-                Decks, fences & more
-              </p>
+      <section className="relative -mt-20 pb-20 pt-24">
+        <div className="mx-auto max-w-6xl px-8">
+          <div className="overflow-hidden rounded-2xl border border-sage-green/20 bg-cream/8 backdrop-blur-sm elev-1">
+            <div className="hidden h-1 w-full bg-linear-to-r from-transparent via-wood-brown/20 to-transparent md:block" />
+            <div className="flex flex-col divide-y divide-sage-green/15 md:flex-row md:divide-y-0 md:divide-x">
+              <div className="flex-1 px-8 py-10 text-center">
+                <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
+                  🏠
+                </div>
+                <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+                  Custom Homes
+                </h3>
+                <p className="text-sm leading-relaxed text-stone-gray">
+                  Dream big, we&rsquo;ll build bigger
+                </p>
+              </div>
+              <div className="flex-1 px-8 py-10 text-center">
+                <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
+                  🔨
+                </div>
+                <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+                  Renovations
+                </h3>
+                <p className="text-sm leading-relaxed text-stone-gray">
+                  Love your home again
+                </p>
+              </div>
+              <div className="flex-1 px-8 py-10 text-center">
+                <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
+                  🌲
+                </div>
+                <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+                  Outdoor Living
+                </h3>
+                <p className="text-sm leading-relaxed text-stone-gray">
+                  Decks, fences & more
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -197,7 +204,7 @@ export default function Hero() {
           <h2 className="mb-4 font-serif text-4xl text-deep-green md:text-5xl">
             About Whispering Pines
           </h2>
-          <div className="mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-transparent via-wood-brown/30 to-transparent" />
+          <div className="mx-auto h-1 w-24 rounded-full bg-linear-to-r from-transparent via-wood-brown/30 to-transparent" />
         </div>
         <div className="grid gap-10 md:grid-cols-2">
           <p className="leading-relaxed text-stone-gray">
@@ -220,12 +227,12 @@ export default function Hero() {
           <h2 className="mb-4 font-serif text-4xl text-deep-green md:text-5xl">
             What We Do Best
           </h2>
-          <div className="mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-transparent via-wood-brown/30 to-transparent" />
+          <div className="mx-auto h-1 w-24 rounded-full bg-linear-to-r from-transparent via-wood-brown/30 to-transparent" />
         </div>
 
         <div className="mb-8 grid gap-6 md:grid-cols-2">
           {/* Service cards with warm colors */}
-          <div className="group relative overflow-hidden rounded-xl border border-sage-green/20 bg-gradient-to-br from-cream/50 to-warm-tan/30 p-8 elev-1 top-sheen transition-all hover:elev-2">
+          <div className="group relative overflow-hidden rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 p-8 elev-1 top-sheen transition-all hover:elev-2">
             <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-forest-green/5 transition-transform group-hover:scale-150" />
             <h3 className="relative mb-3 font-serif text-2xl text-forest-green">
               Complete Builds
@@ -240,7 +247,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl border border-sage-green/20 bg-gradient-to-br from-warm-tan/30 to-cream/50 p-8 elev-1 top-sheen transition-all hover:elev-2">
+          <div className="group relative overflow-hidden rounded-xl border border-sage-green/20 bg-linear-to-br from-warm-tan/5 to-cream/5 p-8 elev-1 top-sheen transition-all hover:elev-2">
             <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-forest-green/5 transition-transform group-hover:scale-150" />
             <h3 className="relative mb-3 font-serif text-2xl text-forest-green">
               Smart Renovations
@@ -257,7 +264,7 @@ export default function Hero() {
         </div>
 
         {/* Detailed services with warm background */}
-        <div className="rounded-xl bg-gradient-to-r from-sage-green/10 to-cream/20 p-8">
+        <div className="rounded-xl bg-warm-tan/5 p-8">
           <h3 className="mb-6 text-center text-lg font-medium text-deep-green">
             Everything In Between
           </h3>
@@ -294,14 +301,14 @@ export default function Hero() {
       </section>
 
       {/* Why Choose Us with warm organic feel */}
-      <section className="bg-gradient-to-b from-transparent via-warm-tan/20 to-cream/30 py-20">
+      <section className="py-20">
         <div className="mx-auto max-w-4xl px-8 text-center">
           <h2 className="mb-12 font-serif text-3xl text-deep-green md:text-4xl">
             Why Families Choose Whispering Pines
           </h2>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <div className="rounded-lg surface-1 p-6 elev-1 transition-all hover:elev-2">
+            <div className="rounded-lg bg-warm-tan/5 p-6 elev-1 transition-all hover:elev-2">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
                 💪
               </div>
@@ -313,7 +320,7 @@ export default function Hero() {
                 job—it&rsquo;s our reputation
               </p>
             </div>
-            <div className="rounded-lg surface-1 p-6 elev-1 transition-all hover:elev-2">
+            <div className="rounded-lg bg-warm-tan/5 p-6 elev-1 transition-all hover:elev-2">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
                 🎯
               </div>
@@ -325,7 +332,7 @@ export default function Hero() {
                 haven&rsquo;t thought of yet
               </p>
             </div>
-            <div className="rounded-lg surface-1 p-6 elev-1 transition-all hover:elev-2">
+            <div className="rounded-lg bg-warm-tan/5 p-6 elev-1 transition-all hover:elev-2">
               <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
                 🤝
               </div>
@@ -370,7 +377,7 @@ export default function Hero() {
       {/* Contact */}
       <section
         id="contact"
-        className="rounded-t-3xl bg-gradient-to-b from-sage-green/10 to-transparent py-20"
+        className="rounded-t-3xl bg-linear-to-b from-sage-green/10 to-transparent py-20"
       >
         <div className="mx-auto max-w-4xl px-8 text-center">
           <h2 className="mb-4 font-serif text-3xl text-deep-green md:text-4xl">
