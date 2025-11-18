@@ -1,4 +1,4 @@
 1:"$Sreact.fragment"
 2:I[96269,["/whispering-pines/_next/static/chunks/3c8f70c53ab86145.js","/whispering-pines/_next/static/chunks/d276a49971e241af.js"],"default"]
 3:I[92282,["/whispering-pines/_next/static/chunks/3c8f70c53ab86145.js","/whispering-pines/_next/static/chunks/d276a49971e241af.js"],"default"]
-0:{"buildId":"vVsB-TfJLgQMSBZvp1eDr","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"rhqbFyY5bO3D_lfDHKWqn","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}

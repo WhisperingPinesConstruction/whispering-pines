@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
 2:I[23532,["/whispering-pines/_next/static/chunks/3c8f70c53ab86145.js","/whispering-pines/_next/static/chunks/d276a49971e241af.js"],"OutletBoundary"]
 3:"$Sreact.suspense"
-0:{"buildId":"vVsB-TfJLgQMSBZvp1eDr","rsc":["$","$1","c",{"children":[["$","section",null,{"className":"prose prose-zinc max-w-none dark:prose-invert","children":[["$","h1",null,{"children":"News"}],["$","p",null,{"children":"Updates and announcements will be posted here."}],["$","article",null,{"children":[["$","h2",null,{"children":"Welcome to the News page"}],["$","p",null,{"children":"Start adding posts or connect a CMS later."}]]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"rhqbFyY5bO3D_lfDHKWqn","rsc":["$","$1","c",{"children":[["$","section",null,{"className":"prose prose-zinc max-w-none dark:prose-invert","children":[["$","h1",null,{"children":"News"}],["$","p",null,{"children":"Updates and announcements will be posted here."}],["$","article",null,{"children":[["$","h2",null,{"children":"Welcome to the News page"}],["$","p",null,{"children":"Start adding posts or connect a CMS later."}]]}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
 4:null
