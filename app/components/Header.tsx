@@ -105,9 +105,9 @@ export default function Header() {
         <div className="hidden md:block">
           <Link
             href="/#contact"
-            className="rounded-lg bg-gold-accent px-6 py-2.5 text-sm font-semibold text-deep-green transition-all hover:bg-cream top-sheen elev-1 hover:elev-2"
+            className="relative inline-flex items-center justify-center rounded-lg bg-gold-accent px-6 py-2.5 text-sm font-semibold text-deep-green transition-all hover:bg-cream top-sheen elev-1 hover:elev-2 shimmer-sweep [--shine-duration:3.2s]"
           >
-            Get Quote
+            <span className="relative z-10">Get Quote</span>
           </Link>
         </div>
 
@@ -175,9 +175,9 @@ export default function Header() {
                 <Link
                   href="/#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block rounded-lg bg-gold-accent py-2.5 text-center font-semibold text-deep-green top-sheen elev-1 hover:elev-2"
+                  className="relative inline-flex w-full items-center justify-center rounded-lg bg-gold-accent py-2.5 text-center font-semibold text-deep-green top-sheen elev-1 hover:elev-2 shimmer-sweep [--shine-duration:3.2s]"
                 >
-                  Get Free Quote
+                  <span className="relative z-10">Get Free Quote</span>
                 </Link>
               </li>
             </ul>

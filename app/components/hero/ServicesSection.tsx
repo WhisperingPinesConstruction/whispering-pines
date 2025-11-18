@@ -9,11 +9,19 @@ import deckSideAfter from "@/public/DeckSide_Final.jpg";
 import cedarBefore from "@/public/CedarSiding_Before.jpeg";
 import cedarAfter from "@/public/CedarSiding_Collage.png";
 
+type LightboxItem = {
+  title: string;
+  beforeSrc: ImageProps["src"];
+  afterSrc: ImageProps["src"];
+  alt?: string;
+};
+
 type BeforeAfterCardProps = {
   title: string;
   beforeSrc: ImageProps["src"];
   afterSrc: ImageProps["src"];
   alt?: string;
+  onEnlarge?: (item: LightboxItem) => void;
 };
 
 function BeforeAfterCard({
@@ -21,6 +29,7 @@ function BeforeAfterCard({
   beforeSrc,
   afterSrc,
   alt,
+  onEnlarge,
 }: BeforeAfterCardProps) {
   const [showAfter, setShowAfter] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -38,11 +47,10 @@ function BeforeAfterCard({
     return () => clearTimeout(timeout);
   }, [showAfter]);
 
-  const toggle = () => setShowAfter((prev) => !prev);
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      toggle();
+      onEnlarge?.({ title, beforeSrc, afterSrc, alt });
     }
   };
   const afterVisible = isHovering || showAfter;
@@ -52,15 +60,14 @@ function BeforeAfterCard({
   return (
     <div
       className="group relative cursor-pointer overflow-hidden rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 elev-1 transition-all hover:elev-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-forest-green/50"
-      onClick={toggle}
+      onClick={() => onEnlarge?.({ title, beforeSrc, afterSrc, alt })}
       role="button"
       tabIndex={0}
       onKeyDown={onKeyDown}
-      aria-pressed={showAfter}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
+      <div className="relative aspect-16/10 w-full overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -109,7 +116,120 @@ function BeforeAfterCard({
   );
 }
 
+function Lightbox({
+  open,
+  item,
+  onClose,
+}: {
+  open: boolean;
+  item: LightboxItem | null;
+  onClose: () => void;
+}) {
+  const [showAfter, setShowAfter] = useState(true);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        setShowAfter((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open || !item) return null;
+
+  const beforeX = showAfter ? "-100%" : "0%";
+  const afterX = showAfter ? "0%" : "100%";
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-[min(96vw,90rem)] h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          aria-label="Close"
+          className="absolute -right-2 -top-2 z-10 rounded-full bg-black/70 px-3 py-1 text-white hover:bg-black/80"
+          onClick={onClose}
+        >
+          ×
+        </button>
+        <div
+          className="relative h-full w-full overflow-hidden rounded-xl border border-sage-green/30 bg-black"
+          onClick={() => setShowAfter((prev) => !prev)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setShowAfter((prev) => !prev);
+            }
+          }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              transform: `translateX(${beforeX})`,
+              transition: "transform 600ms ease-in-out",
+            }}
+          >
+            <Image
+              src={item.beforeSrc}
+              alt={item.alt ?? `${item.title} before`}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+          <div
+            className="absolute inset-0"
+            style={{
+              transform: `translateX(${afterX})`,
+              transition: "transform 600ms ease-in-out",
+            }}
+          >
+            <Image
+              src={item.afterSrc}
+              alt={item.alt ? `${item.alt} (after)` : `${item.title} after`}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+          <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/50 px-2 py-1 text-xs font-medium text-white">
+            {showAfter ? "After" : "Before"}
+          </div>
+        </div>
+        <div className="mt-3 text-center text-sm text-white/90">
+          {item.title} • Press ⌘/Ctrl+←/→ or click to toggle
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ServicesSection() {
+  const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   return (
     <section id="services" className="mx-auto max-w-6xl px-8 py-16">
       <div className="mb-12 text-center">
@@ -124,16 +244,19 @@ export default function ServicesSection() {
           title="Front Deck"
           beforeSrc={deckFrontBefore}
           afterSrc={deckFrontAfter}
+          onEnlarge={setLightboxItem}
         />
         <BeforeAfterCard
           title="Side Deck"
           beforeSrc={deckSideBefore}
           afterSrc={deckSideAfter}
+          onEnlarge={setLightboxItem}
         />
         <BeforeAfterCard
           title="Cedar Siding"
           beforeSrc={cedarBefore}
           afterSrc={cedarAfter}
+          onEnlarge={setLightboxItem}
         />
       </div>
 
@@ -203,6 +326,12 @@ export default function ServicesSection() {
           &ldquo;Creative solutions for unique problems&rdquo;
         </p>
       </div>
+      <Lightbox
+        key={lightboxItem?.title ?? "lightbox"}
+        open={!!lightboxItem}
+        item={lightboxItem}
+        onClose={() => setLightboxItem(null)}
+      />
     </section>
   );
 }

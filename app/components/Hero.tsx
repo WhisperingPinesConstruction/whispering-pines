@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroTop from "./hero/HeroTop";
 import TransitionSection from "./hero/TransitionSection";
 import AboutSection from "./hero/AboutSection";
@@ -11,34 +13,63 @@ import ContactSection from "./hero/ContactSection";
 
 export default function Hero() {
   useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add("snap-page");
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate each hero section on scroll
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("section.wp-section")
+    );
+
+    // Set initial state
+    sections.forEach((el) => {
+      gsap.set(el, { opacity: 0.25, y: 65 });
+    });
+
+    // Create animations with ScrollTrigger
+    const animations = sections.map((el) =>
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 1.25,
+        ease: "power3.easeInOut",
+        overwrite: "auto",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%",
+          end: "top 20%",
+          toggleActions: "play none none reverse",
+          once: false,
+        },
+      })
+    );
+
     return () => {
-      root.classList.remove("snap-page");
+      animations.forEach((anim) => anim.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   return (
     <>
-      <section className="snap-start snap-normal">
+      <section className="wp-section">
         <HeroTop />
       </section>
 
       <div className="font-medium">
-        <section className="snap-start snap-normal">
+        <section className="wp-section">
           <AboutSection />
 
           <TransitionSection />
         </section>
-        <section className="snap-center snap-normal">
+        <section className="wp-section">
           <ServicesSection />
         </section>
-        <section className="snap-start snap-normal">
+        <section className="wp-section">
           <WhyChooseUsSection />
 
           <TestimonialSection />
         </section>
-        <section className="snap-start snap-normal">
+        <section className="wp-section">
           <ContactSection />
         </section>
       </div>

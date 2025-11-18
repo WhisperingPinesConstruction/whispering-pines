@@ -371,3 +371,40 @@ h6 {
     text-wrap: balance;
   }
 }
+
+/* Subtle shimmer sweep for CTA buttons */
+@keyframes shineSweep {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-sweep::after {
+  content: "";
+  position: absolute;
+  inset: -25% -40%;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0) 65%
+  );
+  transform: translateX(-150%);
+  animation: shineSweep 4.5s ease-in-out infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-sweep::after {
+    animation: none;
+  }
+}

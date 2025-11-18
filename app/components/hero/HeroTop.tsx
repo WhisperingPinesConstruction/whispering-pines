@@ -1,11 +1,53 @@
+"use client";
+
 import Link from "next/link";
 import woodBG from "@/public/WoodGrain.jpg";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function HeroTop() {
   const isVisible = true;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const leadRef = useRef<HTMLSpanElement | null>(null);
+  const titleRef = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const lead = leadRef.current;
+    const title = titleRef.current;
+    const section = sectionRef.current;
+    if (!lead || !title) return;
+
+    gsap.set([lead, title], { opacity: 0 });
+    gsap.set(lead, { xPercent: -120 });
+    gsap.set(title, { xPercent: 120 });
+
+    const tl = gsap.timeline({
+      defaults: { duration: 1.1, ease: "power3.out" },
+      scrollTrigger: {
+        trigger: section ?? lead,
+        start: "top 80%",
+        once: true,
+      },
+    });
+    tl.to(lead, { xPercent: 0, opacity: 1 }, 0).to(
+      title,
+      { xPercent: 0, opacity: 1 },
+      0.05
+    );
+
+    return () => {
+      tl.kill();
+    };
+  }, []);
 
   return (
-    <section className="relative -mx-4 -mt-8 mb-20 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative -mx-4 -mt-8 mb-20 overflow-hidden"
+    >
       <div className="absolute inset-0">
         <div
           className="absolute inset-0 bg-center bg-cover"
@@ -42,8 +84,13 @@ export default function HeroTop() {
             </div>
 
             <h1 className="max-w-4xl font-serif text-4xl font-normal leading-tight text-cream md:text-6xl lg:text-7xl">
-              Building Dreams with
-              <span className="mt-2 block text-5xl italic text-gold-accent md:text-7xl lg:text-8xl">
+              <span ref={leadRef} className="block">
+                Building Dreams with
+              </span>
+              <span
+                ref={titleRef}
+                className="mt-2 block text-5xl italic text-gold-accent md:text-7xl lg:text-8xl"
+              >
                 Heart & Hammer
               </span>
             </h1>
@@ -69,7 +116,7 @@ export default function HeroTop() {
             <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="#contact"
-                className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 transition-all hover:scale-105 hover:elev-3"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 shimmer-sweep transition-all hover:scale-105 hover:elev-3"
               >
                 <span className="relative z-10 flex items-center gap-2 font-semibold">
                   Get Your Free Quote
