@@ -85,6 +85,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Enable viewport-level scroll snapping only when the homepage hero is active */
+html.snap-page {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 6rem; /* account for sticky header height */
+}
+
 section[id] {
   scroll-margin-top: 6rem; /* account for sticky header */
 }
