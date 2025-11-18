@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import type { ImageProps } from "next/image";
 import deckFrontBefore from "@/public/DeckFront_Before.jpg";
 import deckFrontAfter from "@/public/DeckFront_Final.jpg";
@@ -8,6 +8,13 @@ import deckSideBefore from "@/public/DeckSide_Before.jpg";
 import deckSideAfter from "@/public/DeckSide_Final.jpg";
 import cedarBefore from "@/public/CedarSiding_Before.jpeg";
 import cedarAfter from "@/public/CedarSiding_Collage.png";
+
+function getBlurDataURL(src: ImageProps["src"]): string | undefined {
+  if (typeof src === "object" && src && "blurDataURL" in src) {
+    return (src as unknown as { blurDataURL?: string }).blurDataURL;
+  }
+  return undefined;
+}
 
 function useIsSmallScreen() {
   const [isSmall, setIsSmall] = useState(false);
@@ -49,8 +56,12 @@ function BeforeAfterCard({
   const [isHovering, setIsHovering] = useState(false);
   const [beforeLoaded, setBeforeLoaded] = useState(false);
   const [afterLoaded, setAfterLoaded] = useState(false);
-  const [hasIntersected, setHasIntersected] = useState(false);
-  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  // Low-res readiness using blurDataURL preloading
+  const beforeBlur = getBlurDataURL(beforeSrc);
+  const afterBlur = getBlurDataURL(afterSrc);
+  const [beforeLowReady, setBeforeLowReady] = useState<boolean>(!beforeBlur);
+  const [afterLowReady, setAfterLowReady] = useState<boolean>(!afterBlur);
 
   // Auto-toggle with longer dwell on "After"
   useEffect(() => {
@@ -65,23 +76,6 @@ function BeforeAfterCard({
     return () => clearTimeout(timeout);
   }, [showAfter]);
 
-  // Start loading the "after" image only after "before" has loaded and card is in/near view or user intent
-  useEffect(() => {
-    const node = cardRef.current;
-    if (!node) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasIntersected(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "200px 0px", threshold: 0.1 }
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, []);
-
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -93,11 +87,10 @@ function BeforeAfterCard({
   const afterVisible = (!isSmallScreen && isHovering) || showAfter;
   const beforeX = afterVisible ? "-100%" : "0%";
   const afterX = afterVisible ? "0%" : "100%";
-  const shouldLoadAfter = (hasIntersected || isHovering) && beforeLoaded;
+  // We now always load after image as soon as component mounts
 
   return (
     <div
-      ref={cardRef}
       className="group relative cursor-pointer overflow-hidden rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 elev-1 transition-all hover:elev-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-forest-green/50"
       onClick={() => {
         if (!isSmallScreen) {
@@ -107,7 +100,6 @@ function BeforeAfterCard({
       role="button"
       tabIndex={0}
       onKeyDown={onKeyDown}
-      onTouchStart={() => setHasIntersected(true)}
       onMouseEnter={() => {
         if (!isSmallScreen) setIsHovering(true);
       }}
@@ -115,6 +107,28 @@ function BeforeAfterCard({
         if (!isSmallScreen) setIsHovering(false);
       }}
     >
+      {/* Hidden preloaders for blurDataURL to get a real onLoad event */}
+      {beforeBlur && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={beforeBlur}
+          alt=""
+          aria-hidden="true"
+          className="hidden"
+          onLoad={() => setBeforeLowReady(true)}
+        />
+      )}
+      {afterBlur && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={afterBlur}
+          alt=""
+          aria-hidden="true"
+          className="hidden"
+          onLoad={() => setAfterLowReady(true)}
+        />
+      )}
+
       <div className="relative aspect-16/10 w-full overflow-hidden">
         <div
           className="absolute inset-0"
@@ -123,12 +137,24 @@ function BeforeAfterCard({
             transition: "transform 600ms ease-in-out",
           }}
         >
+          {/* Low-res background using blurDataURL if available */}
+          {beforeBlur && (
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url('${beforeBlur}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(0px)",
+                transform: "scale(1.02)",
+              }}
+            />
+          )}
           <Image
             src={beforeSrc}
             alt={alt ?? `${title} before`}
             fill
-            priority={false}
-            loading="lazy"
+            loading="eager"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             placeholder="blur"
@@ -146,31 +172,42 @@ function BeforeAfterCard({
             transition: "transform 600ms ease-in-out",
           }}
         >
-          {shouldLoadAfter && (
-            <Image
-              src={afterSrc}
-              alt={alt ? `${alt} (after)` : `${title} after`}
-              fill
-              loading="lazy"
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover"
-              placeholder="blur"
+          {/* Low-res background using blurDataURL if available */}
+          {afterBlur && (
+            <div
+              className="absolute inset-0"
               style={{
-                opacity: afterLoaded ? 1 : 0,
-                transition: "opacity 300ms ease",
+                backgroundImage: `url('${afterBlur}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(0px)",
+                transform: "scale(1.02)",
               }}
-              onLoadingComplete={() => setAfterLoaded(true)}
             />
           )}
-          {/* Overlay skeleton if After is visible but not loaded yet */}
-          {afterVisible && (!shouldLoadAfter || !afterLoaded) && (
+          <Image
+            src={afterSrc}
+            alt={alt ? `${alt} (after)` : `${title} after`}
+            fill
+            loading="eager"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+            placeholder="blur"
+            style={{
+              opacity: afterLoaded ? 1 : 0,
+              transition: "opacity 300ms ease",
+            }}
+            onLoadingComplete={() => setAfterLoaded(true)}
+          />
+          {/* Overlay skeleton while After is visible and neither blur nor full image is ready */}
+          {afterVisible && !(afterLowReady || afterLoaded) && (
             <div className="absolute inset-0 z-10 bg-black/10 backdrop-blur-[1px]">
               <div className="absolute inset-0 animate-pulse bg-linear-to-br from-stone-100/70 to-stone-300/70 dark:from-stone-700/70 dark:to-stone-800/70" />
             </div>
           )}
         </div>
-        {/* Before skeleton overlay until before image completes */}
-        {!beforeLoaded && (
+        {/* Before skeleton overlay until either blur or full image is ready */}
+        {!(beforeLowReady || beforeLoaded) && (
           <div className="absolute inset-0 z-10">
             <div className="absolute inset-0 animate-pulse bg-linear-to-br from-stone-100 to-stone-200 dark:from-stone-700 dark:to-stone-800" />
             <div className="absolute inset-0 flex items-center justify-center">
