@@ -162,7 +162,7 @@ function BeforeAfterCard({
               opacity: beforeLoaded ? 1 : 0,
               transition: "opacity 300ms ease",
             }}
-            onLoadingComplete={() => setBeforeLoaded(true)}
+            onLoad={() => setBeforeLoaded(true)}
           />
         </div>
         <div
@@ -197,7 +197,7 @@ function BeforeAfterCard({
               opacity: afterLoaded ? 1 : 0,
               transition: "opacity 300ms ease",
             }}
-            onLoadingComplete={() => setAfterLoaded(true)}
+            onLoad={() => setAfterLoaded(true)}
           />
           {/* Overlay skeleton while After is visible and neither blur nor full image is ready */}
           {afterVisible && !(afterLowReady || afterLoaded) && (

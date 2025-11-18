@@ -255,7 +255,7 @@ h6 {
 }
 
 .elev-1 {
-  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.1),
+  box-shadow: inset 0 1px 0 rgb(var(--highlight-rgb) / 0.13),
     /* top highlight */ 0 1px 1px rgb(var(--shadow-rgb) / 0.12),
     /* close soft */ 0 2px 4px rgb(var(--shadow-rgb) / 0.1); /* mid */
 }
@@ -398,7 +398,7 @@ h6 {
     rgba(255, 255, 255, 0) 65%
   );
   transform: translateX(-150%);
-  animation: shineSweep 4.5s ease-in-out infinite;
+  animation: shineSweep 3s ease-in-out infinite;
   pointer-events: none;
   mix-blend-mode: screen;
 }

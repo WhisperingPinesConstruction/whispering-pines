@@ -54,7 +54,8 @@ export default function Header() {
               alt="Whispering Pines"
               width={400}
               height={400}
-              priority
+              sizes="(min-width: 768px) 48px, 40px"
+              fetchPriority="high"
               className="h-10 w-auto md:h-12"
             />
           </div>

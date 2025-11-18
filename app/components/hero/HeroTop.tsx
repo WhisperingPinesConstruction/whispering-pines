@@ -46,7 +46,7 @@ export default function HeroTop() {
   return (
     <section
       ref={sectionRef}
-      className="relative -mx-4 -mt-8 mb-20 overflow-hidden"
+      className="relative -mx-4 -mt-8 mb-20 overflow-hidden min-h-[60vh] lg:min-h-[70vh]"
     >
       <div className="absolute inset-0">
         <div
@@ -64,8 +64,8 @@ export default function HeroTop() {
         />
       </div>
 
-      <div className="relative">
-        <div className="mx-auto max-w-6xl px-8 py-24 md:py-32">
+      <div className="relative z-10">
+        <div className="mx-auto max-w-6xl px-8 pt-24 md:pt-32 pb-28 md:pb-40">
           <div
             className={`transition-all duration-1000 ${
               isVisible
@@ -165,12 +165,13 @@ export default function HeroTop() {
         </div>
       </div>
 
-      <div className="absolute -bottom-1 left-0 right-0">
+      <div className="pointer-events-none absolute -bottom-1 left-0 right-0 z-0 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36">
         <svg
           viewBox="0 0 1440 120"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full"
+          preserveAspectRatio="none"
+          className="h-full w-full"
         >
           <path
             d="M0 40C240 80 480 20 720 40C960 60 1200 30 1440 40V120H0V40Z"
