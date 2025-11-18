@@ -7,7 +7,7 @@ export default function ContactSection() {
       className="rounded-t-3xl bg-linear-to-b from-sage-green/10 to-transparent py-20"
     >
       <div className="mx-auto max-w-4xl px-8 text-center">
-        <h2 className="mb-4 font-serif text-3xl text-deep-green md:text-4xl">
+        <h2 className="mb-4 font-serif text-3xl text-sage-green md:text-4xl">
           Let&rsquo;s Build Something Together
         </h2>
         <p className="mb-10 text-lg text-stone-gray">
@@ -20,7 +20,7 @@ export default function ContactSection() {
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
           <Link
             href="mailto:hello@whisperingpines.ca"
-            className="inline-flex items-center rounded-lg bg-forest-green px-8 py-4 font-medium text-cream top-sheen elev-1 transition-all hover:bg-deep-green hover:elev-2"
+            className="inline-flex items-center rounded-lg bg-sage-green px-8 py-4 font-medium text-cream top-sheen elev-1 transition-all hover:bg-deep-green hover:elev-2"
           >
             Email Us
           </Link>
@@ -28,7 +28,7 @@ export default function ContactSection() {
             <p className="mb-1 text-sm text-stone-gray">Call us anytime:</p>
             <a
               href="tel:613-555-0123"
-              className="text-lg font-semibold text-forest-green hover:text-deep-green"
+              className="text-lg font-semibold text-sage-green hover:text-forest-green"
             >
               (613) 555-0123
             </a>
@@ -36,12 +36,10 @@ export default function ContactSection() {
         </div>
 
         <p className="mt-10 text-xs text-stone-gray">
-          Proudly serving Ottawa, Kanata, Stittsville, Barrhaven, and surrounding
-          communities
+          Proudly serving Ottawa, Kanata, Stittsville, Barrhaven, and
+          surrounding communities
         </p>
       </div>
     </section>
   );
 }
-
-

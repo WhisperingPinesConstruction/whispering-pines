@@ -26,7 +26,9 @@ export default function HeroTop() {
         <div className="mx-auto max-w-6xl px-8 py-24 md:py-32">
           <div
             className={`transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
             }`}
           >
             <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cream/30 bg-cream/20 px-5 py-2.5 backdrop-blur-sm">
@@ -125,21 +127,19 @@ export default function HeroTop() {
         >
           <path
             d="M0 40C240 80 480 20 720 40C960 60 1200 30 1440 40V120H0V40Z"
-            fill="#0f2e1e"
+            fill="#042f1c"
           />
           <path
             d="M0 60C240 90 480 40 720 60C960 80 1200 50 1440 60V120H0V60Z"
-            fill="#1b3a2a"
+            fill="#021f13"
             opacity="0.5"
           />
           <path
             d="M0 80C240 100 480 60 720 80C960 100 1200 70 1440 80V120H0V80Z"
-            fill="#18362a"
+            fill="#010904"
           />
         </svg>
       </div>
     </section>
   );
 }
-
-

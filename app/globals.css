@@ -3,8 +3,8 @@
 
 :root {
   /* Base brand palette */
-  --brand-green: #05472a; /* Single source of truth for green */
-  --sage-green: #7a8b6f;
+  --brand-green: #042f1c; /* Single source of truth for green */
+  --sage-green: #065432;
   --gold-accent: #c9a961;
   --wood-brown: #8b6f47;
   --stone-gray: #8c8577;
@@ -54,7 +54,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #000404;
     --foreground: #fafaf8;
     --sage-accent: #7b8c75;
     /* Surfaces lift slightly above dark base */

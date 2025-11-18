@@ -2,7 +2,7 @@ export default function WhyChooseUsSection() {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-4xl px-8 text-center">
-        <h2 className="mb-12 font-serif text-3xl text-deep-green md:text-4xl">
+        <h2 className="mb-12 font-serif text-3xl text-sage-green md:text-4xl">
           Why Families Choose Whispering Pines
         </h2>
 
@@ -11,7 +11,7 @@ export default function WhyChooseUsSection() {
             <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
               💪
             </div>
-            <h3 className="mb-2 font-serif text-lg text-forest-green">
+            <h3 className="mb-2 font-serif text-lg text-gold-accent">
               We Care More
             </h3>
             <p className="text-sm leading-relaxed text-stone-gray">
@@ -23,7 +23,7 @@ export default function WhyChooseUsSection() {
             <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
               🎯
             </div>
-            <h3 className="mb-2 font-serif text-lg text-forest-green">
+            <h3 className="mb-2 font-serif text-lg text-gold-accent">
               Real Experience
             </h3>
             <p className="text-sm leading-relaxed text-stone-gray">
@@ -35,7 +35,7 @@ export default function WhyChooseUsSection() {
             <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-forest-green/10 text-3xl">
               🤝
             </div>
-            <h3 className="mb-2 font-serif text-lg text-forest-green">
+            <h3 className="mb-2 font-serif text-lg text-gold-accent">
               Fair Pricing
             </h3>
             <p className="text-sm leading-relaxed text-stone-gray">
@@ -47,5 +47,3 @@ export default function WhyChooseUsSection() {
     </section>
   );
 }
-
-

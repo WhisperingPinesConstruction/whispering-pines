@@ -9,7 +9,7 @@ export default function TransitionSection() {
               <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
                 🏠
               </div>
-              <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+              <h3 className="mt-3 mb-2 font-serif text-xl text-gold-accent">
                 Custom Homes
               </h3>
               <p className="text-sm leading-relaxed text-stone-gray">
@@ -20,7 +20,7 @@ export default function TransitionSection() {
               <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
                 🔨
               </div>
-              <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+              <h3 className="mt-3 mb-2 font-serif text-xl text-gold-accent">
                 Renovations
               </h3>
               <p className="text-sm leading-relaxed text-stone-gray">
@@ -31,7 +31,7 @@ export default function TransitionSection() {
               <div className="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full bg-forest-green/10 text-6xl text-wood-brown">
                 🌲
               </div>
-              <h3 className="mt-3 mb-2 font-serif text-xl text-deep-green">
+              <h3 className="mt-3 mb-2 font-serif text-xl text-gold-accent">
                 Outdoor Living
               </h3>
               <p className="text-sm leading-relaxed text-stone-gray">
@@ -44,5 +44,3 @@ export default function TransitionSection() {
     </section>
   );
 }
-
-

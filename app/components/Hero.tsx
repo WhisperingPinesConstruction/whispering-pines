@@ -14,8 +14,8 @@ export default function Hero() {
       <HeroTop />
 
       <div className="font-medium">
-        <TransitionSection />
         <AboutSection />
+        <TransitionSection />
         <ServicesSection />
         <WhyChooseUsSection />
         <TestimonialSection />

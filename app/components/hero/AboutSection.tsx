@@ -2,7 +2,7 @@ export default function AboutSection() {
   return (
     <section id="about" className="mx-auto max-w-5xl px-8 py-16">
       <div className="mb-8 text-center">
-        <h2 className="mb-4 font-serif text-4xl text-deep-green md:text-5xl">
+        <h2 className="mb-4 font-serif text-4xl text-sage-green md:text-5xl">
           About Whispering Pines
         </h2>
         <div className="mx-auto h-1 w-24 rounded-full bg-linear-to-r from-transparent via-wood-brown/30 to-transparent" />
@@ -23,5 +23,3 @@ export default function AboutSection() {
     </section>
   );
 }
-
-
