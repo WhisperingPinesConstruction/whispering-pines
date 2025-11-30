@@ -9,9 +9,9 @@
   --wood-brown: #8b6f47;
   --stone-gray: #8c8577;
 
-  /* Neutrals */
-  --background: #faf7f0; /* Warm cream background */
-  --foreground: #2a2a2a; /* Softer black */
+  /* Neutrals - Enforced Dark Mode */
+  --background: #000404;
+  --foreground: #fafaf8;
   --brand-cream: #f7f3eb; /* Existing logo background */
   --cream: #f5ead8; /* Rich cream */
   --warm-tan: #e8dcc6; /* Warm tan */
@@ -23,18 +23,18 @@
   --deep-green: var(--brand-green);
   --premium-green: var(--brand-green);
 
-  /* Layered surface system */
+  /* Layered surface system - Enforced Dark Mode */
   --surface-0: var(--background);
-  --surface-1: color-mix(in oklab, var(--background) 92%, white);
-  --surface-2: color-mix(in oklab, var(--background) 85%, white);
-  --surface-3: color-mix(in oklab, var(--background) 78%, white);
+  --surface-1: color-mix(in oklab, var(--background) 86%, white);
+  --surface-2: color-mix(in oklab, var(--background) 78%, white);
+  --surface-3: color-mix(in oklab, var(--background) 70%, white);
 
   /* Shadow/highlight colors (RGB channel vars for easy alpha control) */
   --shadow-rgb: 0 0 0;
   --highlight-rgb: 255 255 255;
 
   /* Accent variants */
-  --sage-accent: var(--sage-green);
+  --sage-accent: #7b8c75;
 }
 
 @theme inline {
@@ -50,21 +50,6 @@
   --color-stone-gray: var(--stone-gray);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000404;
-    --foreground: #fafaf8;
-    --sage-accent: #7b8c75;
-    /* Surfaces lift slightly above dark base */
-    --surface-0: var(--background);
-    --surface-1: color-mix(in oklab, var(--background) 86%, white);
-    --surface-2: color-mix(in oklab, var(--background) 78%, white);
-    --surface-3: color-mix(in oklab, var(--background) 70%, white);
-    --shadow-rgb: 0 0 0;
-    --highlight-rgb: 255 255 255;
-  }
 }
 
 /* Premium typography */

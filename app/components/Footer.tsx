@@ -124,20 +124,20 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-cream/80">
               <li>
                 <a
-                  href="tel:613-555-0123"
+                  href="tel:613-614-7016"
                   className="flex items-center gap-2 transition-colors hover:text-cream"
                 >
                   <span className="text-gold-accent">📞</span>
-                  (613) 555-0123
+                  (613) 614-7016
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:hello@whisperingpines.ca"
+                  href="mailto:rwilkes@whispering-pines-construction.com"
                   className="flex items-center gap-2 transition-colors hover:text-cream"
                 >
                   <span className="text-gold-accent">✉️</span>
-                  hello@whisperingpines.ca
+                  rwilkes@whispering-pines-construction.com
                 </a>
               </li>
               <li className="pt-2">
@@ -169,7 +169,7 @@ export default function Footer() {
               rights reserved.
             </p>
             <p className="italic">
-              &ldquo;Building dreams with heart & hammer&rdquo;
+              "The Contractor Who Puts Your Project First."
             </p>
           </div>
         </div>

@@ -19,7 +19,7 @@ export default function ContactSection() {
 
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-center">
           <Link
-            href="mailto:hello@whisperingpines.ca"
+            href="mailto:rwilkes@whispering-pines-construction.com"
             className="inline-flex items-center rounded-lg bg-sage-green px-8 py-4 font-medium text-cream top-sheen elev-1 transition-all hover:bg-deep-green hover:elev-2"
           >
             Email Us
@@ -27,19 +27,21 @@ export default function ContactSection() {
           <div>
             <p className="mb-1 text-sm text-stone-gray">Call us anytime:</p>
             <a
-              href="tel:613-555-0123"
+              href="tel:613-614-7016"
               className="text-lg font-semibold text-sage-green hover:text-forest-green"
             >
-              (613) 555-0123
+              (613) 614-7016
             </a>
           </div>
         </div>
 
         <p className="mt-10 text-xs text-stone-gray">
-          Proudly serving Ottawa, Kanata, Stittsville, Barrhaven, and
-          surrounding communities
+          Proudly serving Ottawa and the surrounding area.
         </p>
       </div>
     </section>
   );
 }
+
+
+

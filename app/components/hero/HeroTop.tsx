@@ -82,16 +82,16 @@ export default function HeroTop() {
                 New in Ottawa
               </span>
             </div>
-
-            <h1 className="max-w-4xl font-serif text-4xl font-normal leading-tight text-cream md:text-6xl lg:text-7xl">
+            <h1><br></br></h1>
+            <h1 className="max-w-3xl font-serif text-3xl font-normal leading-tight text-cream md:text-5xl lg:text-6xl">
               <span ref={leadRef} className="block">
-                Building Dreams with
+              The Contractor Who Puts Your Project First.
               </span>
               <span
                 ref={titleRef}
-                className="mt-2 block text-5xl italic text-gold-accent md:text-7xl lg:text-8xl"
+                className="mt-2 block text-2xl italic text-gold-accent md:text-4xl lg:text-5xl"
               >
-                Heart & Hammer
+              Your project, our passion.
               </span>
             </h1>
 
