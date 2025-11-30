@@ -142,12 +142,8 @@ export default function Footer() {
               </li>
               <li className="pt-2">
                 <address className="not-italic">
-                  <span className="text-gold-accent">📍</span> Serving Ottawa
-                  Valley
+                  <span className="text-gold-accent">📍</span> Serving Ottawa & The Surrounding Area
                   <br />
-                  <span className="ml-6 text-xs">
-                    Ottawa • Kanata • Stittsville • Barrhaven
-                  </span>
                 </address>
               </li>
             </ul>
