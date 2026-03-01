@@ -35,7 +35,7 @@ jobs:
 
       - name: Build (static export)
         env:
-          BASE_PATH: /whispering-pines
+          BASE_PATH: ""
         run: pnpm build
 
       - name: Add .nojekyll
