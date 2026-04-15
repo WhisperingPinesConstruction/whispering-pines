@@ -57,3 +57,23 @@ const TEAM_QUERY = `*[_type == "teamMember"] | order(order asc) {
 export async function fetchTeamMembers(): Promise<SanityTeamMember[]> {
   return sanityClient.fetch(TEAM_QUERY);
 }
+
+export type SanityTestimonial = {
+  _id: string;
+  quote: string;
+  name: string;
+  location?: string;
+  order?: number;
+};
+
+const TESTIMONIALS_QUERY = `*[_type == "testimonial"] | order(order asc) {
+  _id,
+  quote,
+  name,
+  location,
+  order
+}`;
+
+export async function fetchTestimonials(): Promise<SanityTestimonial[]> {
+  return sanityClient.fetch(TESTIMONIALS_QUERY);
+}
