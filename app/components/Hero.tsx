@@ -10,6 +10,7 @@ import ServicesSection from "./hero/ServicesSection";
 import WhyChooseUsSection from "./hero/WhyChooseUsSection";
 import TestimonialSection from "./hero/TestimonialSection";
 import ContactSection from "./hero/ContactSection";
+import TeamSection from "./hero/TeamSection";
 
 export default function Hero() {
   useEffect(() => {
@@ -68,6 +69,8 @@ export default function Hero() {
           <WhyChooseUsSection />
 
           <TestimonialSection />
+
+          <TeamSection />
         </section>
         <section className="wp-section">
           <ContactSection />

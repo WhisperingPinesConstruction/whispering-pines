@@ -2,14 +2,10 @@
 import Image from "next/image";
 import { useEffect, useState, type KeyboardEvent } from "react";
 import type { ImageProps } from "next/image";
-import deckFrontBefore from "@/public/DeckFront_Before.jpg";
-import deckFrontAfter from "@/public/DeckFront_Final.jpg";
-import deckSideBefore from "@/public/DeckSide_Before.jpg";
-import deckSideAfter from "@/public/DeckSide_Final.jpg";
-import cedarBefore from "@/public/CedarSiding_Before.jpeg";
-import cedarAfter from "@/public/CedarSiding_Collage.png";
+import { fetchProjects, urlFor, type SanityProject } from "@/lib/sanity";
 
 function getBlurDataURL(src: ImageProps["src"]): string | undefined {
+  if (typeof src === "string") return undefined;
   if (typeof src === "object" && src && "blurDataURL" in src) {
     return (src as unknown as { blurDataURL?: string }).blurDataURL;
   }
@@ -157,7 +153,7 @@ function BeforeAfterCard({
             loading="eager"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            placeholder="blur"
+            {...(beforeBlur ? { placeholder: "blur" as const } : {})}
             style={{
               opacity: beforeLoaded ? 1 : 0,
               transition: "opacity 300ms ease",
@@ -192,7 +188,7 @@ function BeforeAfterCard({
             loading="eager"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover"
-            placeholder="blur"
+            {...(afterBlur ? { placeholder: "blur" as const } : {})}
             style={{
               opacity: afterLoaded ? 1 : 0,
               transition: "opacity 300ms ease",
@@ -333,8 +329,24 @@ function Lightbox({
   );
 }
 
+function useSanityProjects() {
+  const [projects, setProjects] = useState<SanityProject[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProjects()
+      .then(setProjects)
+      .catch((err) => console.error("Failed to fetch projects from Sanity:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { projects, loading };
+}
+
 export default function ServicesSection() {
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
+  const { projects, loading } = useSanityProjects();
+
   return (
     <section id="services" className="mx-auto max-w-6xl px-8 py-16">
       <div className="mb-12 text-center">
@@ -345,24 +357,23 @@ export default function ServicesSection() {
       </div>
 
       <div className="mb-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <BeforeAfterCard
-          title="Front Deck"
-          beforeSrc={deckFrontBefore}
-          afterSrc={deckFrontAfter}
-          onEnlarge={setLightboxItem}
-        />
-        <BeforeAfterCard
-          title="Side Deck"
-          beforeSrc={deckSideBefore}
-          afterSrc={deckSideAfter}
-          onEnlarge={setLightboxItem}
-        />
-        <BeforeAfterCard
-          title="Cedar Siding"
-          beforeSrc={cedarBefore}
-          afterSrc={cedarAfter}
-          onEnlarge={setLightboxItem}
-        />
+        {loading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="aspect-16/10 animate-pulse rounded-xl bg-linear-to-br from-stone-100 to-stone-200"
+              />
+            ))
+          : projects.map((project) => (
+              <BeforeAfterCard
+                key={project._id}
+                title={project.title}
+                beforeSrc={urlFor(project.beforeImage).width(800).quality(80).url()}
+                afterSrc={urlFor(project.afterImage).width(800).quality(80).url()}
+                alt={project.alt}
+                onEnlarge={setLightboxItem}
+              />
+            ))}
       </div>
 
       <Lightbox

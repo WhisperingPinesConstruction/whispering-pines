@@ -14,8 +14,8 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/#about", label: "About" },
-  { href: "/projects", label: "Projects" },
-  { href: "/news", label: "News" },
+  // { href: "/projects", label: "Projects" },
+  // { href: "/news", label: "News" },
   { href: "/#contact", label: "Contact" },
 ];
 
