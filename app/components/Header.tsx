@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import logoPng from "@/public/whisperingpineslogo.png";
 
 type NavItem = {
@@ -12,15 +11,14 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Home" },
   { href: "/#about", label: "About" },
-  // { href: "/projects", label: "Projects" },
-  // { href: "/news", label: "News" },
+  { href: "/#services", label: "Services" },
+  { href: "/#work", label: "Projects" },
+  { href: "/#process", label: "Our Process" },
   { href: "/#contact", label: "Contact" },
 ];
 
 export default function Header() {
-  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -28,163 +26,120 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const activeHref = useMemo(() => {
-    if (!pathname) return "/";
-    return pathname === "/" ? "/" : pathname.replace(/\/$/, "");
-  }, [pathname]);
-
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-forest-green/95 backdrop-blur-md elev-3 top-sheen"
-          : "bg-forest-green/90 backdrop-blur-sm elev-2 top-sheen"
+      className={`sticky top-0 z-50 border-b border-brass/20 bg-pine/95 backdrop-blur-md transition-shadow duration-300 ${
+        isScrolled ? "shadow-[0_10px_30px_rgba(0,0,0,0.35)]" : ""
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div
+        className={`relative mx-auto flex max-w-7xl items-center justify-between px-5 transition-[padding] duration-300 md:px-10 ${
+          isScrolled ? "py-2.5" : "py-4"
+        }`}
+      >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="rounded-full bg-cream/80 p-2 elev-1">
+        <Link href="/" className="group flex items-center gap-3.5">
+          <div className="flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-full bg-disc transition-transform duration-300 group-hover:scale-105">
             <Image
               src={logoPng}
-              alt="Whispering Pines"
+              alt="Whispering Pines Construction"
               width={400}
               height={400}
-              sizes="(min-width: 768px) 48px, 40px"
+              sizes="46px"
               fetchPriority="high"
-              className="h-10 w-auto md:h-12"
+              className="h-[42px] w-[42px] object-contain"
             />
           </div>
-          <div className="hidden sm:block">
-            <div className="font-serif text-xl text-cream">
+          {/* Wordmark yields to the CTA on the narrowest screens */}
+          <div className="hidden min-[430px]:block">
+            <div className="font-display text-[19px] leading-none text-cream">
               Whispering Pines
             </div>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-gold-accent/80">
+            <div className="mt-1 text-[9.5px] uppercase tracking-[0.32em] text-brass-light">
               Construction
             </div>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav aria-label="Main Navigation" className="hidden md:block">
-          <ul className="flex items-center gap-8">
-            {NAV_ITEMS.map(({ href, label }) => {
-              const isActive =
-                href === "/"
-                  ? activeHref === "/"
-                  : activeHref === href || activeHref.startsWith(href + "/");
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    aria-current={isActive ? "page" : undefined}
-                    className={`
-                      relative py-2 text-sm font-medium transition-all duration-300
-                      ${
-                        isActive
-                          ? "text-gold-accent"
-                          : "text-cream/90 hover:text-cream"
-                      }
-                    `}
-                  >
-                    {label}
-                    {isActive && (
-                      <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-gold-accent" />
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <div className="flex items-center gap-2.5 md:gap-8">
+          {/* Desktop Navigation */}
+          <nav
+            aria-label="Main Navigation"
+            className="hidden items-center gap-8 md:flex"
+          >
+            {NAV_ITEMS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="link-underline py-1 text-[13.5px] text-[#e4dcc9]"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
 
-        {/* CTA Button */}
-        <div className="hidden md:block">
+          {/* CTA — always visible, every screen size */}
           <Link
             href="/#contact"
-            className="relative inline-flex items-center justify-center rounded-lg bg-gold-accent px-6 py-2.5 text-sm font-semibold text-deep-green transition-all hover:bg-cream top-sheen elev-1 hover:elev-2 shimmer-sweep [--shine-duration:3.2s]"
+            className="btn-brass px-4 py-2.5 text-[11.5px] uppercase md:px-5 md:text-xs"
           >
-            <span className="relative z-10">Get Quote</span>
+            Get a Quote
           </Link>
-        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden rounded-lg bg-cream/10 p-2 text-cream"
-          aria-label="Toggle menu"
-        >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-brass/40 text-cream transition-colors hover:border-brass/70 md:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-cream/10 bg-forest-green/95 backdrop-blur-md elev-2">
-          <nav className="px-6 py-4">
-            <ul className="space-y-2">
-              {NAV_ITEMS.map(({ href, label }) => {
-                const isActive =
-                  href === "/"
-                    ? activeHref === "/"
-                    : activeHref === href || activeHref.startsWith(href + "/");
-                return (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`
-                        block rounded-lg px-4 py-2 transition-all
-                        ${
-                          isActive
-                            ? "surface-1 text-gold-accent font-semibold elev-1"
-                            : "text-cream/90 hover:surface-1 hover:text-cream hover:elev-1"
-                        }
-                      `}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                );
-              })}
-              <li className="pt-2">
-                <Link
-                  href="/#contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative inline-flex w-full items-center justify-center rounded-lg bg-gold-accent py-2.5 text-center font-semibold text-deep-green top-sheen elev-1 hover:elev-2 shimmer-sweep [--shine-duration:3.2s]"
-                >
-                  <span className="relative z-10">Get Free Quote</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.6}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.6}
+                  d="M4 7h16M4 12h16M4 17h16"
+                />
+              )}
+            </svg>
+          </button>
         </div>
-      )}
+
+        {/* Mobile Navigation — slide-down panel anchored to header */}
+        {isMobileMenuOpen && (
+          <div className="menu-in absolute inset-x-0 top-full flex flex-col border-t border-brass/20 bg-pine px-6 pb-4 pt-2 shadow-[0_20px_40px_rgba(0,0,0,0.45)] md:hidden">
+            {NAV_ITEMS.map(({ href, label }, i) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`py-3.5 text-[15px] text-[#e4dcc9] transition-colors hover:text-brass-pale ${
+                  i < NAV_ITEMS.length - 1 ? "border-b border-brass/15" : ""
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </header>
   );
 }

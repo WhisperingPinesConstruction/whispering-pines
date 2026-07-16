@@ -7,13 +7,11 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <section className="prose prose-zinc max-w-none dark:prose-invert">
-      <h1>Projects</h1>
-      <p>A curated list of projects will appear here.</p>
-      <ul>
-        <li>Project A — brief description</li>
-        <li>Project B — brief description</li>
-      </ul>
+    <section className="mx-auto max-w-3xl px-6 py-20">
+      <h1 className="mb-4 text-4xl text-cream">Projects</h1>
+      <p className="text-parchment-dim">
+        A curated list of projects will appear here.
+      </p>
     </section>
   );
 }

@@ -16,66 +16,102 @@ export default function Hero() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate each hero section on scroll
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>("section.wp-section")
-    );
+    const mm = gsap.matchMedia();
 
-    // Set initial state
-    sections.forEach((el) => {
-      gsap.set(el, { opacity: 0.25, y: 65 });
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Sections and their backgrounds stay visible at all times; only the
+      // inner content blocks rise in, so a mistimed trigger can never leave
+      // a blank stretch of page
+      const reveals = gsap.utils.toArray<HTMLElement>("[data-reveal]");
+      reveals.forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 24,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 97%",
+            once: true,
+          },
+        });
+      });
+
+      // Grids reveal their children with a stagger
+      const staggers = gsap.utils.toArray<HTMLElement>("[data-stagger]");
+      staggers.forEach((el) => {
+        gsap.from(el.children, {
+          opacity: 0,
+          y: 18,
+          duration: 0.7,
+          ease: "power3.out",
+          stagger: 0.07,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 97%",
+            once: true,
+          },
+        });
+      });
+
+      // Brass divider rules grow out from the center
+      const rules = gsap.utils.toArray<HTMLElement>("[data-rule]");
+      rules.forEach((el) => {
+        gsap.from(el, {
+          scaleX: 0,
+          duration: 1.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 96%",
+            once: true,
+          },
+        });
+      });
+
+      // Line icons draw their strokes in (paths carry pathLength="1")
+      const drawIcons = gsap.utils.toArray<SVGElement>("[data-draw]");
+      drawIcons.forEach((icon, i) => {
+        const strokes = icon.querySelectorAll("path, rect, circle");
+        gsap.set(strokes, { strokeDasharray: 1, strokeDashoffset: 1 });
+        gsap.to(strokes, {
+          strokeDashoffset: 0,
+          duration: 1.2,
+          delay: (i % 3) * 0.1,
+          ease: "power2.inOut",
+          scrollTrigger: {
+            trigger: icon,
+            start: "top 96%",
+            once: true,
+          },
+        });
+      });
     });
 
-    // Create animations with ScrollTrigger
-    const animations = sections.map((el) =>
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 1.25,
-        ease: "power3.easeInOut",
-        overwrite: "auto",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse",
-          once: false,
-        },
-      })
-    );
+    // Sanity content lands after mount and grows the page, which shifts
+    // every trigger position; recalculate once it has had time to settle
+    const refreshTimers = [
+      setTimeout(() => ScrollTrigger.refresh(), 1200),
+      setTimeout(() => ScrollTrigger.refresh(), 3000),
+    ];
 
     return () => {
-      animations.forEach((anim) => anim.kill());
+      refreshTimers.forEach(clearTimeout);
+      mm.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   return (
     <>
-      <section className="wp-section">
-        <HeroTop />
-      </section>
-
-      <div className="font-medium">
-        <section className="wp-section">
-          <AboutSection />
-
-          <TransitionSection />
-        </section>
-        <section className="wp-section">
-          <ServicesSection />
-        </section>
-        <section className="wp-section">
-          <WhyChooseUsSection />
-
-          <TestimonialSection />
-
-          <TeamSection />
-        </section>
-        <section className="wp-section">
-          <ContactSection />
-        </section>
-      </div>
+      <HeroTop />
+      <AboutSection />
+      <ServicesSection />
+      <TransitionSection />
+      <TestimonialSection />
+      <WhyChooseUsSection />
+      <TeamSection />
+      <ContactSection />
     </>
   );
 }

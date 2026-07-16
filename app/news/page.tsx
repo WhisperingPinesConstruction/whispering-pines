@@ -7,13 +7,11 @@ export const metadata: Metadata = {
 
 export default function NewsPage() {
   return (
-    <section className="prose prose-zinc max-w-none dark:prose-invert">
-      <h1>News</h1>
-      <p>Updates and announcements will be posted here.</p>
-      <article>
-        <h2>Welcome to the News page</h2>
-        <p>Start adding posts or connect a CMS later.</p>
-      </article>
+    <section className="mx-auto max-w-3xl px-6 py-20">
+      <h1 className="mb-4 text-4xl text-cream">News</h1>
+      <p className="text-parchment-dim">
+        Updates and announcements will be posted here.
+      </p>
     </section>
   );
 }

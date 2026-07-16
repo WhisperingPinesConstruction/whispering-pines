@@ -26,66 +26,72 @@ export default function TeamSection() {
       .finally(() => setLoading(false));
   }, []);
 
+  if (!loading && members.length === 0) return null;
+
   return (
-    <section id="team" className="mx-auto max-w-5xl px-8 py-16">
-      <div className="text-center">
-        <h2 className="mb-4 font-serif text-3xl text-sage-green md:text-4xl">
+    <section
+      id="team"
+      className="wp-section mx-auto max-w-[1000px] px-5 py-20 text-center md:px-14 md:py-24"
+    >
+      <div data-reveal>
+        <div className="eyebrow mb-3.5">The People</div>
+        <h2 className="text-3xl text-[#e8d9bb] md:text-[38px]">
           Meet the Team
         </h2>
-        <div className="mx-auto mb-12 h-1 w-24 rounded-full bg-gradient-to-r from-gold-accent/60 via-gold-accent to-gold-accent/60" />
       </div>
+      <div data-rule className="brass-rule mx-auto mb-12 mt-[22px] md:mb-[52px]" />
 
-      <div className="flex flex-wrap justify-center gap-8">
+      <div data-reveal className="flex flex-wrap justify-center gap-6">
         {loading
           ? Array.from({ length: 2 }).map((_, i) => (
               <div
                 key={i}
-                className="w-full max-w-sm animate-pulse rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 p-8"
+                className="w-full max-w-[340px] animate-pulse rounded-2xl border border-brass/15 bg-pine-card p-9"
               >
-                <div className="mx-auto mb-5 h-36 w-36 rounded-full bg-stone-200" />
-                <div className="mx-auto mb-2 h-5 w-32 rounded bg-stone-200" />
-                <div className="mx-auto mb-4 h-4 w-48 rounded bg-stone-200" />
+                <div className="mx-auto mb-5 h-[120px] w-[120px] rounded-full bg-pine-tile" />
+                <div className="mx-auto mb-2 h-5 w-32 rounded bg-pine-tile" />
+                <div className="mx-auto mb-4 h-4 w-44 rounded bg-pine-tile" />
                 <div className="space-y-2">
-                  <div className="h-3 w-full rounded bg-stone-200" />
-                  <div className="h-3 w-full rounded bg-stone-200" />
-                  <div className="h-3 w-3/4 rounded bg-stone-200" />
+                  <div className="h-3 w-full rounded bg-pine-tile" />
+                  <div className="h-3 w-full rounded bg-pine-tile" />
+                  <div className="h-3 w-3/4 rounded bg-pine-tile" />
                 </div>
               </div>
             ))
           : members.map((member) => (
               <div
                 key={member._id}
-                className="w-full max-w-sm rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 p-8 text-center elev-1 top-sheen transition-all hover:elev-2"
+                className="card-lift group w-full max-w-[340px] rounded-2xl border border-brass/25 bg-pine-card p-9 text-center hover:border-brass/50"
               >
                 {member.photo ? (
-                  <div className="mx-auto mb-5 h-36 w-36 overflow-hidden rounded-full border-2 border-sage-green/20">
+                  <div className="mx-auto mb-[22px] h-[120px] w-[120px] overflow-hidden rounded-full border border-brass/40 transition-shadow duration-300 group-hover:shadow-[0_0_0_3px_rgba(185,147,91,0.2)]">
                     <Image
                       src={urlFor(member.photo)
-                        .width(288)
-                        .height(288)
+                        .width(240)
+                        .height(240)
                         .quality(80)
                         .url()}
                       alt={member.name}
-                      width={144}
-                      height={144}
+                      width={120}
+                      height={120}
                       className="h-full w-full object-cover"
                     />
                   </div>
                 ) : (
-                  <div className="mx-auto mb-5 flex h-36 w-36 items-center justify-center rounded-full border-2 border-sage-green/20 bg-linear-to-br from-sage-green/10 to-warm-tan/10">
-                    <span className="font-serif text-3xl text-sage-green/60">
+                  <div className="mx-auto mb-[22px] flex h-[120px] w-[120px] items-center justify-center rounded-full border border-brass/40 bg-pine transition-shadow duration-300 group-hover:shadow-[0_0_0_3px_rgba(185,147,91,0.2)]">
+                    <span className="font-display text-[34px] text-brass-light">
                       {getInitials(member.name)}
                     </span>
                   </div>
                 )}
 
-                <h3 className="mb-1 font-serif text-xl text-sage-green">
+                <h3 className="mb-[5px] text-[21px] text-cream">
                   {member.name}
                 </h3>
-                <p className="mb-4 text-sm font-medium text-gold-accent">
+                <p className="mb-4 text-[13px] tracking-[0.05em] text-brass-light">
                   {member.role}
                 </p>
-                <p className="text-sm leading-relaxed text-stone-gray">
+                <p className="text-sm leading-[1.7] text-parchment-faint">
                   {member.bio}
                 </p>
               </div>

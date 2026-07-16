@@ -1,227 +1,120 @@
 "use client";
+
 import Image from "next/image";
 import { useEffect, useState, type KeyboardEvent } from "react";
-import type { ImageProps } from "next/image";
 import { fetchProjects, urlFor, type SanityProject } from "@/lib/sanity";
 
-function getBlurDataURL(src: ImageProps["src"]): string | undefined {
-  if (typeof src === "string") return undefined;
-  if (typeof src === "object" && src && "blurDataURL" in src) {
-    return (src as unknown as { blurDataURL?: string }).blurDataURL;
-  }
-  return undefined;
-}
+const AUTO_TOGGLE_MS = 3800;
+const IMAGE_WIDTH = 900;
 
-function useIsSmallScreen() {
-  const [isSmall, setIsSmall] = useState(false);
+function useIsTouchLike() {
+  const [isTouch, setIsTouch] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
     const mql = window.matchMedia("(max-width: 767px), (pointer: coarse)");
-    const update = () => setIsSmall(mql.matches);
+    const update = () => setIsTouch(mql.matches);
     update();
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
-  return isSmall;
+  return isTouch;
 }
 
 type LightboxItem = {
   title: string;
-  beforeSrc: ImageProps["src"];
-  afterSrc: ImageProps["src"];
+  beforeSrc?: string;
+  afterSrc: string;
   alt?: string;
 };
 
-type BeforeAfterCardProps = {
+type ProjectCardProps = {
   title: string;
-  beforeSrc: ImageProps["src"];
-  afterSrc: ImageProps["src"];
+  tag?: string;
+  beforeSrc?: string;
+  afterSrc: string;
   alt?: string;
+  autoAfter: boolean;
   onEnlarge?: (item: LightboxItem) => void;
 };
 
-function BeforeAfterCard({
+function ProjectCard({
   title,
+  tag,
   beforeSrc,
   afterSrc,
   alt,
+  autoAfter,
   onEnlarge,
-}: BeforeAfterCardProps) {
-  const isSmallScreen = useIsSmallScreen();
-  const [showAfter, setShowAfter] = useState(false);
+}: ProjectCardProps) {
+  const isTouchLike = useIsTouchLike();
   const [isHovering, setIsHovering] = useState(false);
-  const [beforeLoaded, setBeforeLoaded] = useState(false);
   const [afterLoaded, setAfterLoaded] = useState(false);
 
-  // Low-res readiness using blurDataURL preloading
-  const beforeBlur = getBlurDataURL(beforeSrc);
-  const afterBlur = getBlurDataURL(afterSrc);
-  const [beforeLowReady, setBeforeLowReady] = useState<boolean>(!beforeBlur);
-  const [afterLowReady, setAfterLowReady] = useState<boolean>(!afterBlur);
+  const hasPair = Boolean(beforeSrc);
+  const afterVisible = !hasPair || (!isTouchLike && isHovering) || autoAfter;
 
-  // Auto-toggle with longer dwell on "After"
-  useEffect(() => {
-    const AFTER_DWELL_MS = 3600;
-    const BEFORE_DWELL_MS = 2400;
-    const timeout = setTimeout(
-      () => {
-        setShowAfter((prev) => !prev);
-      },
-      showAfter ? AFTER_DWELL_MS : BEFORE_DWELL_MS
-    );
-    return () => clearTimeout(timeout);
-  }, [showAfter]);
+  const enlarge = () => {
+    if (!isTouchLike) onEnlarge?.({ title, beforeSrc, afterSrc, alt });
+  };
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      if (!isSmallScreen) {
-        onEnlarge?.({ title, beforeSrc, afterSrc, alt });
-      }
+      enlarge();
     }
   };
-  const afterVisible = (!isSmallScreen && isHovering) || showAfter;
-  const beforeX = afterVisible ? "-100%" : "0%";
-  const afterX = afterVisible ? "0%" : "100%";
-  // We now always load after image as soon as component mounts
 
   return (
     <div
-      className="group relative cursor-pointer overflow-hidden rounded-xl border border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 elev-1 transition-all hover:elev-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-forest-green/50"
-      onClick={() => {
-        if (!isSmallScreen) {
-          onEnlarge?.({ title, beforeSrc, afterSrc, alt });
-        }
-      }}
+      className="card-lift group cursor-pointer overflow-hidden rounded-[14px] border border-brass/30 bg-pine-night hover:border-brass/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-brass-light/60"
+      onClick={enlarge}
       role="button"
       tabIndex={0}
+      aria-label={`View ${title} photos`}
       onKeyDown={onKeyDown}
-      onMouseEnter={() => {
-        if (!isSmallScreen) setIsHovering(true);
-      }}
-      onMouseLeave={() => {
-        if (!isSmallScreen) setIsHovering(false);
-      }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
-      {/* Hidden preloaders for blurDataURL to get a real onLoad event */}
-      {beforeBlur && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={beforeBlur}
-          alt=""
-          aria-hidden="true"
-          className="hidden"
-          onLoad={() => setBeforeLowReady(true)}
-        />
-      )}
-      {afterBlur && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={afterBlur}
-          alt=""
-          aria-hidden="true"
-          className="hidden"
-          onLoad={() => setAfterLowReady(true)}
-        />
-      )}
-
-      <div className="relative aspect-16/10 w-full overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: `translateX(${beforeX})`,
-            transition: "transform 600ms ease-in-out",
-          }}
-        >
-          {/* Low-res background using blurDataURL if available */}
-          {beforeBlur && (
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url('${beforeBlur}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                filter: "blur(0px)",
-                transform: "scale(1.02)",
-              }}
-            />
-          )}
+      <div className="relative aspect-[16/11] overflow-hidden">
+        {/* Shimmer until the primary image is in */}
+        {!afterLoaded && (
+          <div className="absolute inset-0 animate-pulse bg-pine-card" />
+        )}
+        {hasPair && beforeSrc && (
           <Image
             src={beforeSrc}
-            alt={alt ?? `${title} before`}
+            alt={alt ?? `${title}, before`}
             fill
-            loading="eager"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            {...(beforeBlur ? { placeholder: "blur" as const } : {})}
-            style={{
-              opacity: beforeLoaded ? 1 : 0,
-              transition: "opacity 300ms ease",
-            }}
-            onLoad={() => setBeforeLoaded(true)}
+            className="object-cover transition-[opacity,transform] duration-[800ms] ease-in-out group-hover:scale-[1.04]"
+            style={{ opacity: afterVisible ? 0 : 1 }}
           />
-        </div>
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: `translateX(${afterX})`,
-            transition: "transform 600ms ease-in-out",
-          }}
-        >
-          {/* Low-res background using blurDataURL if available */}
-          {afterBlur && (
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url('${afterBlur}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                filter: "blur(0px)",
-                transform: "scale(1.02)",
-              }}
-            />
-          )}
-          <Image
-            src={afterSrc}
-            alt={alt ? `${alt} (after)` : `${title} after`}
-            fill
-            loading="eager"
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover"
-            {...(afterBlur ? { placeholder: "blur" as const } : {})}
-            style={{
-              opacity: afterLoaded ? 1 : 0,
-              transition: "opacity 300ms ease",
-            }}
-            onLoad={() => setAfterLoaded(true)}
-          />
-          {/* Overlay skeleton while After is visible and neither blur nor full image is ready */}
-          {afterVisible && !(afterLowReady || afterLoaded) && (
-            <div className="absolute inset-0 z-10 bg-black/10 backdrop-blur-[1px]">
-              <div className="absolute inset-0 animate-pulse bg-linear-to-br from-stone-100/70 to-stone-300/70 dark:from-stone-700/70 dark:to-stone-800/70" />
-            </div>
-          )}
-        </div>
-        {/* Before skeleton overlay until either blur or full image is ready */}
-        {!(beforeLowReady || beforeLoaded) && (
-          <div className="absolute inset-0 z-10">
-            <div className="absolute inset-0 animate-pulse bg-linear-to-br from-stone-100 to-stone-200 dark:from-stone-700 dark:to-stone-800" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-8 w-8 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-            </div>
-          </div>
+        )}
+        <Image
+          src={afterSrc}
+          alt={
+            hasPair ? (alt ? `${alt} (after)` : `${title}, after`) : alt ?? title
+          }
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-[opacity,transform] duration-[800ms] ease-in-out group-hover:scale-[1.04]"
+          style={{ opacity: afterLoaded && !afterVisible ? 0 : afterLoaded ? 1 : 0 }}
+          onLoad={() => setAfterLoaded(true)}
+        />
+        {hasPair && (
+          <span className="absolute left-3 top-3 rounded-full border border-brass/45 bg-[rgba(4,47,30,0.82)] px-3 py-[5px] text-[10.5px] tracking-[0.12em] text-[#e8d9bb]">
+            {afterVisible ? "After" : "Before"}
+          </span>
         )}
       </div>
-
-      <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/45 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
-        {afterVisible ? "After" : "Before"}
+      <div className="flex items-baseline justify-between gap-3 px-[18px] py-4">
+        <span className="font-display text-[17px] text-cream">{title}</span>
+        {tag && (
+          <span className="shrink-0 text-[11px] uppercase tracking-[0.1em] text-brass">
+            {tag}
+          </span>
+        )}
       </div>
-      {/* <div className="pointer-events-none absolute bottom-3 right-3 rounded-md bg-black/15 px-2 py-1 text-[10px] font-medium text-white backdrop-blur-sm">
-        Auto slide • Click toggles • Hover shows After
-      </div> */}
-      {/* <div className="border-sage-green/20 bg-linear-to-br from-cream/5 to-warm-tan/5 elev-1 p-3">
-        <h4 className="font-serif text-base text-forest-green">{title}</h4>
-      </div> */}
     </div>
   );
 }
@@ -236,6 +129,7 @@ function Lightbox({
   onClose: () => void;
 }) {
   const [showAfter, setShowAfter] = useState(true);
+  const hasPair = Boolean(item?.beforeSrc);
 
   useEffect(() => {
     if (!open) return;
@@ -258,122 +152,163 @@ function Lightbox({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative w-[min(80vw,80rem)] h-[80vh]"
+        className="relative h-[80vh] w-[min(80vw,80rem)]"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           aria-label="Close"
-          className="absolute -right-2 -top-2 z-10 rounded-full bg-black/70 px-3 py-1 text-white hover:bg-black/80"
+          className="absolute -right-2 -top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-brass/40 bg-pine text-lg text-cream transition-colors hover:border-brass/70 hover:text-brass-pale"
           onClick={onClose}
         >
           ×
         </button>
         <div
-          className="relative h-full w-full overflow-hidden rounded-xl border border-sage-green/30 bg-black"
-          onClick={() => setShowAfter((prev) => !prev)}
-          role="button"
-          tabIndex={0}
+          className="relative h-full w-full overflow-hidden rounded-[14px] border border-brass/30 bg-pine-night"
+          onClick={() => hasPair && setShowAfter((prev) => !prev)}
+          role={hasPair ? "button" : undefined}
+          tabIndex={hasPair ? 0 : undefined}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+            if (hasPair && (e.key === "Enter" || e.key === " ")) {
               e.preventDefault();
               setShowAfter((prev) => !prev);
             }
           }}
         >
+          {hasPair && item.beforeSrc && (
+            <div
+              className="absolute inset-0 transition-transform duration-[600ms] ease-in-out"
+              style={{ transform: `translateX(${beforeX})` }}
+            >
+              <Image
+                src={item.beforeSrc}
+                alt={item.alt ?? `${item.title}, before`}
+                fill
+                sizes="100vw"
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+          )}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 transition-transform duration-[600ms] ease-in-out"
             style={{
-              transform: `translateX(${beforeX})`,
-              transition: "transform 600ms ease-in-out",
-            }}
-          >
-            <Image
-              src={item.beforeSrc}
-              alt={item.alt ?? `${item.title} before`}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              unoptimized
-            />
-          </div>
-          <div
-            className="absolute inset-0"
-            style={{
-              transform: `translateX(${afterX})`,
-              transition: "transform 600ms ease-in-out",
+              transform: hasPair ? `translateX(${afterX})` : undefined,
             }}
           >
             <Image
               src={item.afterSrc}
-              alt={item.alt ? `${item.alt} (after)` : `${item.title} after`}
+              alt={item.alt ? `${item.alt} (after)` : item.title}
               fill
               sizes="100vw"
               className="object-cover"
               unoptimized
             />
           </div>
-          <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/50 px-2 py-1 text-xs font-medium text-white">
-            {showAfter ? "After" : "Before"}
-          </div>
+          {hasPair && (
+            <span className="absolute left-3 top-3 rounded-full border border-brass/45 bg-[rgba(4,47,30,0.82)] px-3 py-[5px] text-[10.5px] tracking-[0.12em] text-[#e8d9bb]">
+              {showAfter ? "After" : "Before"}
+            </span>
+          )}
         </div>
-        <div className="mt-3 text-center text-sm text-white/90">
-          {item.title} • Press ⌘/Ctrl+←/→ or click to toggle
+        <div className="mt-3 text-center text-sm text-parchment">
+          {item.title}
+          {hasPair && " · Click or press ←/→ to compare"}
         </div>
       </div>
     </div>
   );
 }
 
-function useSanityProjects() {
+export default function ServicesSection() {
   const [projects, setProjects] = useState<SanityProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
+  const [autoAfter, setAutoAfter] = useState(false);
 
   useEffect(() => {
     fetchProjects()
       .then(setProjects)
-      .catch((err) => console.error("Failed to fetch projects from Sanity:", err))
+      .catch((err) =>
+        console.error("Failed to fetch projects from Sanity:", err)
+      )
       .finally(() => setLoading(false));
   }, []);
 
-  return { projects, loading };
-}
+  // One shared clock so every card flips together
+  useEffect(() => {
+    const interval = setInterval(
+      () => setAutoAfter((prev) => !prev),
+      AUTO_TOGGLE_MS
+    );
+    return () => clearInterval(interval);
+  }, []);
 
-export default function ServicesSection() {
-  const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
-  const { projects, loading } = useSanityProjects();
+  if (!loading && projects.length === 0) return null;
 
   return (
-    <section id="services" className="mx-auto max-w-6xl px-8 py-16">
-      <div className="mb-12 text-center">
-        <h2 className="mb-4 font-serif text-4xl text-sage-green md:text-5xl">
-          Recent Projects
-        </h2>
-        <div className="mx-auto h-1 w-24 rounded-full bg-linear-to-r from-transparent via-wood-brown/30 to-transparent" />
-      </div>
+    <section
+      id="work"
+      className="wp-section border-y border-brass/15 bg-pine-deep"
+    >
+      <div className="mx-auto max-w-[1200px] px-5 py-20 md:px-14 md:py-[88px]">
+        <div
+          data-reveal
+          className="mb-11 flex flex-wrap items-end justify-between gap-4"
+        >
+          <div>
+            <div className="eyebrow mb-3">Selected Work</div>
+            <h2 className="text-3xl text-cream md:text-[40px]">
+              Recent Projects
+            </h2>
+          </div>
+          <span className="font-accent hidden text-lg text-sage md:inline">
+            Hover to reveal the transformation
+          </span>
+        </div>
 
-      <div className="mb-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {loading
-          ? Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="aspect-16/10 animate-pulse rounded-xl bg-linear-to-br from-stone-100 to-stone-200"
-              />
-            ))
-          : projects.map((project) => (
-              <BeforeAfterCard
-                key={project._id}
-                title={project.title}
-                beforeSrc={urlFor(project.beforeImage).width(800).quality(80).url()}
-                afterSrc={urlFor(project.afterImage).width(800).quality(80).url()}
-                alt={project.alt}
-                onEnlarge={setLightboxItem}
-              />
-            ))}
+        <div
+          data-reveal
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="aspect-[16/11] animate-pulse rounded-[14px] border border-brass/15 bg-pine-card"
+                />
+              ))
+            : projects.map((project) => {
+                const afterSource = project.afterImage ?? project.beforeImage;
+                if (!afterSource) return null;
+                const beforeSrc =
+                  project.afterImage && project.beforeImage
+                    ? urlFor(project.beforeImage)
+                        .width(IMAGE_WIDTH)
+                        .quality(80)
+                        .url()
+                    : undefined;
+                return (
+                  <ProjectCard
+                    key={project._id}
+                    title={project.title}
+                    tag={project.tag}
+                    beforeSrc={beforeSrc}
+                    afterSrc={urlFor(afterSource)
+                      .width(IMAGE_WIDTH)
+                      .quality(80)
+                      .url()}
+                    alt={project.alt}
+                    autoAfter={autoAfter}
+                    onEnlarge={setLightboxItem}
+                  />
+                );
+              })}
+        </div>
       </div>
 
       <Lightbox

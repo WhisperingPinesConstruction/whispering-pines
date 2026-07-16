@@ -17,8 +17,9 @@ export function urlFor(source: SanityImageSource) {
 export type SanityProject = {
   _id: string;
   title: string;
-  beforeImage: SanityImageSource;
-  afterImage: SanityImageSource;
+  beforeImage?: SanityImageSource;
+  afterImage?: SanityImageSource;
+  tag?: string;
   alt?: string;
   order?: number;
 };
@@ -28,6 +29,7 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc) {
   title,
   beforeImage,
   afterImage,
+  tag,
   alt,
   order
 }`;

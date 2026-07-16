@@ -1,192 +1,173 @@
 "use client";
 
 import Link from "next/link";
-import woodBG from "@/public/WoodGrain.jpg";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import woodBG from "@/public/WoodGrain.jpg";
+import deckPhoto from "@/public/DeckFront_Final.jpg";
+
+const STATS = [
+  { value: "20+", label: "Years" },
+  { value: "Family", label: "Owned" },
+  { value: "Free", label: "Quotes" },
+];
 
 export default function HeroTop() {
-  const isVisible = true;
   const sectionRef = useRef<HTMLElement | null>(null);
-  const leadRef = useRef<HTMLSpanElement | null>(null);
-  const titleRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia(sectionRef);
 
-    const lead = leadRef.current;
-    const title = titleRef.current;
-    const section = sectionRef.current;
-    if (!lead || !title) return;
-
-    gsap.set([lead, title], { opacity: 0 });
-    gsap.set(lead, { xPercent: -120 });
-    gsap.set(title, { xPercent: 120 });
-
-    const tl = gsap.timeline({
-      defaults: { duration: 1.1, ease: "power3.out" },
-      scrollTrigger: {
-        trigger: section ?? lead,
-        start: "top 80%",
-        once: true,
-      },
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out", duration: 0.9 },
+      });
+      tl.from("[data-hero-reveal]", {
+        opacity: 0,
+        y: 26,
+        stagger: 0.1,
+      }).from(
+        "[data-hero-card]",
+        { opacity: 0, y: 34, scale: 0.975, duration: 1.15 },
+        0.35
+      );
     });
-    tl.to(lead, { xPercent: 0, opacity: 1 }, 0).to(
-      title,
-      { xPercent: 0, opacity: 1 },
-      0.05
-    );
 
-    return () => {
-      tl.kill();
-    };
+    return () => mm.revert();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative -mx-4 -mt-8 mb-20 overflow-hidden min-h-[60vh] lg:min-h-[70vh]"
-    >
-      <div className="absolute inset-0">
-        <div
-          className="absolute inset-0 bg-center bg-cover"
-          style={{
-            backgroundImage: `url(${woodBG.src})`,
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.8) 100%)",
-          }}
-        />
-      </div>
+    <section id="top" ref={sectionRef} className="relative overflow-hidden bg-pine">
+      {/* Wood grain texture + tonal gradient + brass glow */}
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-[0.16] mix-blend-luminosity"
+        style={{ backgroundImage: `url(${woodBG.src})` }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(115deg, rgba(3,20,12,.96) 0%, rgba(4,40,26,.72) 55%, rgba(4,47,30,.5) 100%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute -right-36 -top-40 h-[620px] w-[620px] rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(185,147,91,.18) 0%, rgba(185,147,91,0) 66%)",
+        }}
+      />
 
-      <div className="relative z-10">
-        <div className="mx-auto max-w-6xl px-8 pt-24 md:pt-32 pb-28 md:pb-40">
+      <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-5 py-16 md:grid-cols-[1.05fr_.95fr] md:gap-[52px] md:px-14 md:pb-[92px] md:pt-[84px]">
+        {/* Left column */}
+        <div>
           <div
-            className={`transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
+            data-hero-reveal
+            className="mb-7 inline-flex items-center gap-[11px] rounded-full border border-[#e8d9bb]/30 bg-[#e8d9bb]/[0.07] px-4 py-2"
           >
-            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-cream/30 bg-cream/20 px-5 py-2.5 backdrop-blur-sm">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-accent opacity-75"></span>
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gold-accent"></span>
-              </span>
-              <span className="text-sm font-medium uppercase tracking-wide text-cream">
-                New in Ottawa
-              </span>
+            <span className="relative inline-flex h-2 w-2">
+              <span className="pulse-dot absolute inset-0 rounded-full bg-brass-light" />
+              <span className="relative h-2 w-2 rounded-full bg-brass-light" />
+            </span>
+            <span className="text-[11.5px] tracking-[0.2em] text-[#e8d9bb]">
+              NEW IN OTTAWA
+            </span>
+          </div>
+
+          <h1
+            data-hero-reveal
+            className="text-4xl leading-[1.1] tracking-[-0.01em] text-cream-bright md:text-[58px] md:leading-[1.06]"
+          >
+            The Contractor Who Puts Your Project First.
+          </h1>
+          <p
+            data-hero-reveal
+            className="font-accent mt-3.5 text-[26px] text-brass-pale md:text-[38px]"
+          >
+            Built as if it were our own.
+          </p>
+
+          <p
+            data-hero-reveal
+            className="mt-7 max-w-[510px] text-[17px] leading-[1.72] text-[#dcd2bd]"
+          >
+            Twenty years on the tools, a brand-new sign on the truck. From full
+            custom builds to the bathroom you&rsquo;ve been meaning to fix,
+            every project gets the same careful hands.
+          </p>
+
+          <div
+            data-hero-reveal
+            className="mt-9 flex flex-wrap items-center gap-6"
+          >
+            <Link
+              href="/#contact"
+              className="btn-brass px-7 py-4 text-[13.5px] uppercase"
+            >
+              Get Your Free Quote
+              <span className="btn-arrow relative z-10">→</span>
+            </Link>
+            <Link
+              href="/#work"
+              className="link-underline border-b border-[#e8d9bb]/35 pb-[3px] text-sm text-[#e8d9bb]"
+            >
+              Explore Our Work
+            </Link>
+          </div>
+
+          <p
+            data-hero-reveal
+            className="font-accent mt-8 text-[19px] text-brass-pale/85"
+          >
+            &ldquo;Eager to earn your trust, one project at a time&rdquo;
+          </p>
+        </div>
+
+        {/* Right column — photo card + stat strip */}
+        <div
+          data-hero-card
+          className="overflow-hidden rounded-[14px] border border-brass/35 bg-[#03140c]/50 shadow-[0_24px_60px_rgba(0,0,0,0.4)]"
+        >
+          <div className="relative aspect-[4/3] overflow-hidden">
+            <Image
+              src={deckPhoto}
+              alt="Backyard cedar deck built by Whispering Pines in Ottawa"
+              fill
+              priority
+              sizes="(min-width: 768px) 45vw, 100vw"
+              placeholder="blur"
+              className="ken-burns object-cover"
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(4,16,10,0) 55%, rgba(4,16,10,.72) 100%)",
+              }}
+            />
+            <div className="font-display absolute bottom-4 left-[18px] text-[15px] text-cream">
+              Backyard Cedar Deck · Ottawa
             </div>
-            <h1><br></br></h1>
-            <h1 className="max-w-3xl font-serif text-3xl font-normal leading-tight text-cream md:text-5xl lg:text-6xl">
-              <span ref={leadRef} className="block">
-              The Contractor Who Puts Your Project First.
-              </span>
-              <span
-                ref={titleRef}
-                className="mt-2 block text-2xl italic text-gold-accent md:text-4xl lg:text-5xl"
+          </div>
+          <div className="grid grid-cols-3 bg-pine">
+            {STATS.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`px-2 py-[18px] text-center ${
+                  i < STATS.length - 1 ? "border-r border-brass/20" : ""
+                }`}
               >
-              Your project, our passion.
-              </span>
-            </h1>
-
-            <p className="mt-8 max-w-3xl text-lg leading-relaxed text-cream/90 md:text-xl">
-              Twenty years of experience meets fresh enthusiasm. From
-              multi-million dollar estates to your cozy bathroom reno, we bring
-              craftsmanship and creative solutions to every nail we drive.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
-                ✓ Family-Owned
-              </span>
-              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
-                ✓ 20 Years Experience
-              </span>
-              <span className="rounded-lg bg-warm-tan/30 px-4 py-2 text-sm font-medium text-cream backdrop-blur-sm">
-                ✓ Free Quotes
-              </span>
-            </div>
-
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Link
-                href="#contact"
-                className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-r from-gold-accent to-gold-accent/90 px-8 py-4 font-medium text-deep-green top-sheen elev-2 shimmer-sweep transition-all hover:scale-105 hover:elev-3"
-              >
-                <span className="relative z-10 flex items-center gap-2 font-semibold">
-                  Get Your Free Quote
-                  <svg
-                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </span>
-                <div className="absolute inset-0 -z-10 bg-linear-to-r from-cream to-gold-accent opacity-0 transition-opacity group-hover:opacity-100" />
-              </Link>
-
-              <Link
-                href="#services"
-                className="group inline-flex items-center gap-2 border-b-2 border-cream/30 px-2 py-1 text-cream transition-all hover:border-cream/60"
-              >
-                <span>Explore Our Work</span>
-                <svg
-                  className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                  />
-                </svg>
-              </Link>
-            </div>
-
-            <p className="mt-8 text-sm font-medium italic text-gold-accent/80">
-              &ldquo;Eager to earn your trust, one project at a time&rdquo;
-            </p>
+                <div className="font-display text-2xl text-cream">
+                  {stat.value}
+                </div>
+                <div className="mt-[5px] text-[9.5px] uppercase tracking-[0.16em] text-brass-light">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-
-      <div className="pointer-events-none absolute -bottom-1 left-0 right-0 z-0 h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36">
-        <svg
-          viewBox="0 0 1440 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-          className="h-full w-full"
-        >
-          <path
-            d="M0 40C240 80 480 20 720 40C960 60 1200 30 1440 40V120H0V40Z"
-            fill="#042f1c"
-          />
-          <path
-            d="M0 60C240 90 480 40 720 60C960 80 1200 50 1440 60V120H0V60Z"
-            fill="#021f13"
-            opacity="0.5"
-          />
-          <path
-            d="M0 80C240 100 480 60 720 80C960 100 1200 70 1440 80V120H0V80Z"
-            fill="#010904"
-          />
-        </svg>
       </div>
     </section>
   );
